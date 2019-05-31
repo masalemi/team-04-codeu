@@ -80,9 +80,8 @@ public class Datastore {
     return messages;
   }
 
-
   /**
-   * Gets messages posted by a specific user.
+   * Gets messages specified by a query
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
    *     message. List is sorted by time descending.
@@ -112,16 +111,8 @@ public class Datastore {
     return messages;
   }
 
-/*
-Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-            .addSort("timestamp", SortDirection.DESCENDING);
-
-*/
-
 /**
-   * Gets messages posted by a specific user.
+   * Gets messages posted by a specific user by calling getMessagesFromQuery method.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
    *     message. List is sorted by time descending.
@@ -135,7 +126,7 @@ Query query =
   }
 
 /**
-   * Gets messages posted by a specific user.
+   * Gets all messages posted.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
    *     message. List is sorted by time descending.
@@ -147,8 +138,5 @@ Query query =
             .addSort("timestamp", SortDirection.DESCENDING);
     return getMessagesFromQuery(query);
   }
-
-
-
 
 }
