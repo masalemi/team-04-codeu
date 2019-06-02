@@ -89,6 +89,26 @@ public class Datastore {
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
   }
 
+  /** Returns the average message length. */
+  public double getAverageMessageLength(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    double total_length = 0.0;
+    double num_messages = 0.0;
+    for (Entity entity : results.asIterable()) {
+      try {
+        String text = (String) entity.getProperty("text");
+        total_length += text.length();
+        num_messages += 1;
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return total_length / num_messages;
+  }
+
   /** Returns the total number of users. */
   public int getTotalUserCount(){
     Query query = new Query("Message");

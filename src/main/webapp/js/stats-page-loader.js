@@ -8,8 +8,10 @@ function fetchStats(){
     statsContainer.innerHTML = '';
 
     const messageCountElement = buildStatElement('Message count: ' + stats.messageCount);
+    const averageMessageLengthElement = buildStatElement('Average message length: ' + stats.averageMessageLength);
     const userCountElement = buildStatElement('User count: ' + stats.userCount);
     statsContainer.appendChild(messageCountElement);
+    statsContainer.appendChild(averageMessageLengthElement);
     statsContainer.appendChild(userCountElement);
   });
 }
