@@ -89,7 +89,7 @@ public class Datastore {
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
   }
 
-  /** Returns the total number of messages for all users. */
+  /** Returns the total number of users. */
   public int getTotalUserCount(){
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
