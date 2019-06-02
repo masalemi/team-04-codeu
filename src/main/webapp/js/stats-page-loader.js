@@ -9,9 +9,11 @@ function fetchStats(){
 
     const messageCountElement = buildStatElement('Message count: ' + stats.messageCount);
     const averageMessageLengthElement = buildStatElement('Average message length: ' + stats.averageMessageLength);
+    const longestMessage = buildStatElement('Longest Message: ' + stats.longestMessage);
     const userCountElement = buildStatElement('User count: ' + stats.userCount);
     statsContainer.appendChild(messageCountElement);
     statsContainer.appendChild(averageMessageLengthElement);
+    statsContainer.appendChild(longestMessage);
     statsContainer.appendChild(userCountElement);
   });
 }

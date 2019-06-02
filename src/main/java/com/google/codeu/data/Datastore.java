@@ -109,6 +109,29 @@ public class Datastore {
     return total_length / num_messages;
   }
 
+  /** Returns the text of the longest message */
+  public String getLongestMessage(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    int max_len = 0;
+    String msg_contents = "";
+    for (Entity entity : results.asIterable()) {
+      try {
+        String text = (String) entity.getProperty("text");
+        int curr_len = text.length();
+        if (curr_len > max_len){
+          max_len = curr_len;
+          msg_contents = text;
+        }
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return msg_contents;
+  }
+
   /** Returns the total number of users. */
   public int getTotalUserCount(){
     Query query = new Query("Message");
