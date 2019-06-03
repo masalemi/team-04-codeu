@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.HashSet;
+import java.util.HashMap;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -148,5 +149,33 @@ public class Datastore {
       }
     }
     return users.size();
+  }
+
+  /** Returns the most active user. */
+  public String getMostActiveUser(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    HashMap<String, Integer> messages_per_user = new HashMap<String, Integer>();
+    for (Entity entity : results.asIterable()) {
+      try {
+        String userName = (String) entity.getProperty("user");
+        int count = messages_per_user.containsKey(userName) ? messages_per_user.get(userName) : 0;
+        messages_per_user.put(userName, count + 1);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    String most_active = "";
+    int max_messages = 0;
+    for (String user : messages_per_user.keySet()) {
+      int curr_messages = messages_per_user.get(user);
+      if (curr_messages > max_messages){
+        max_messages = curr_messages;
+        most_active = user;
+      }
+    }
+    return most_active;
   }
 }
