@@ -23,11 +23,14 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.FetchOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.UUID;
+import java.util.HashSet;
+import java.util.HashMap;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -81,13 +84,99 @@ public class Datastore {
     return messages;
   }
 
-  public Set<String> getUsers(){
-    Set<String> users = new HashSet<>();
+  /** Returns the total number of messages for all users. */
+  public int getTotalMessageCount(){
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
-    for(Entity entity : results.asIterable()) {
-      users.add((String) entity.getProperty("user"));
+    return results.countEntities(FetchOptions.Builder.withLimit(1000));
+  }
+
+  /** Returns the average message length. */
+  public double getAverageMessageLength(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    double total_length = 0.0;
+    double num_messages = 0.0;
+    for (Entity entity : results.asIterable()) {
+      try {
+        String text = (String) entity.getProperty("text");
+        total_length += text.length();
+        num_messages += 1;
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
     }
-    return users;
+    return total_length / num_messages;
+  }
+
+  /** Returns the text of the longest message */
+  public String getLongestMessage(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    int max_len = 0;
+    String msg_contents = "";
+    for (Entity entity : results.asIterable()) {
+      try {
+        String text = (String) entity.getProperty("text");
+        int curr_len = text.length();
+        if (curr_len > max_len){
+          max_len = curr_len;
+          msg_contents = text;
+        }
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return msg_contents;
+  }
+
+  /** Returns the total number of users. */
+  public int getTotalUserCount(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    HashSet<String> users = new HashSet<String>();
+    for (Entity entity : results.asIterable()) {
+      try {
+        String userName = (String) entity.getProperty("user");
+        users.add(userName);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return users.size();
+  }
+
+  /** Returns the most active user. */
+  public String getMostActiveUser(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    HashMap<String, Integer> messages_per_user = new HashMap<String, Integer>();
+    for (Entity entity : results.asIterable()) {
+      try {
+        String userName = (String) entity.getProperty("user");
+        int count = messages_per_user.containsKey(userName) ? messages_per_user.get(userName) : 0;
+        messages_per_user.put(userName, count + 1);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    String most_active = "";
+    int max_messages = 0;
+    for (String user : messages_per_user.keySet()) {
+      int curr_messages = messages_per_user.get(user);
+      if (curr_messages > max_messages){
+        max_messages = curr_messages;
+        most_active = user;
+      }
+    }
+    return most_active;
   }
 }
