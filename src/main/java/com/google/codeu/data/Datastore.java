@@ -26,6 +26,8 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.FetchOptions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -79,7 +81,6 @@ public class Datastore {
         e.printStackTrace();
       }
     }
-
     return messages;
   }
 
