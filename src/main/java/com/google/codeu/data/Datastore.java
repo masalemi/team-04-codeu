@@ -84,6 +84,12 @@ public class Datastore {
     return messages;
   }
 
+
+}
+
+  public Set<String> getUsers(){
+    Set<String> users = new HashSet<>();
+
   /** Returns the total number of messages for all users. */
   public int getTotalMessageCount(){
     Query query = new Query("Message");
@@ -154,6 +160,7 @@ public class Datastore {
 
   /** Returns the most active user. */
   public String getMostActiveUser(){
+
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     HashMap<String, Integer> messages_per_user = new HashMap<String, Integer>();
@@ -180,3 +187,4 @@ public class Datastore {
     return most_active;
   }
 }
+
