@@ -20,9 +20,13 @@ limitations under the License.
     <meta charset="UTF-8">
     <title>CodeU 2019 Starter Project</title>
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/map.css">
+    <link rel="shortcut icon" href="#">
     <script src="/js/navigation-loader.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCE3UVG8ziLuOBJXWJIqX-Y9BUzbquqgXU"></script>
+    <script src="/js/map.js"></script>
   </head>
-  <body onload="addLoginOrLogoutLinkToNavigation();">
+  <body onload="addLoginOrLogoutLinkToNavigation(); createMap();">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
@@ -36,5 +40,11 @@ limitations under the License.
     their URL.</p>
     <p>This is your code now! Feel free to make changes, and don't be afraid to get creative!
     You could start by modifying this page to tell the world more about your team.</p>
+
+    <div class="map-container">
+      <h1>Hello Google Maps</h1>
+      <div id="map"></div>
+      <p>This page shows a Google Map!</p>
+    </div>
   </body>
 </html>
