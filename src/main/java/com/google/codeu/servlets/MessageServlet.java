@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.apache.commons.validator.routines.UrlValidator;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -81,6 +82,22 @@ public class MessageServlet extends HttpServlet {
     String regex = "(https?://\\S+\\.(png|jpg))";
 	String replacement = "<img src=\"$1\" />";
 	String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+
+	int i = 0;
+	String[] schemes = {"http","https"};
+	UrlValidator urlValidator = new UrlValidator(schemes);
+	while (true) {
+		i = textWithImagesReplaced.indexOf("<img src=", i);
+		if (i == -1) {
+			break;
+		}
+		int end_index = textWithImagesReplaced.indexOf("/>", i);
+		String url = textWithImagesReplaced.substring(i + 10, end_index - 2);
+		if (!urlValidator.isValid(url)) {
+			System.out.println("URL is not valid!");
+		}
+		i += 1;
+	}
 
     Message message = new Message(user, textWithImagesReplaced);
     datastore.storeMessage(message);
