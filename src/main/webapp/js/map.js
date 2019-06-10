@@ -27,7 +27,6 @@ function createUfoSightingsMap(){
       center: {lat: 35.78613674, lng: -119.4491591},
       zoom:3
     });
-
     ufoSightings.forEach((ufoSighting) => {
       new google.maps.Marker({
         position: {lat: ufoSighting.lat, lng: ufoSighting.lng},
