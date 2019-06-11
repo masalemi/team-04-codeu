@@ -83,25 +83,25 @@ public class MessageServlet extends HttpServlet {
     String replacement = "<img src=\"$1\" />";
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
 
+    regex = "(https?://www.youtube.com/\\S+)";
+    replacement = "<iframe src=\"$1\" width=\"560\" height=\"315\"></iframe>";
+    String textWithMediaReplaced = textWithImagesReplaced.replaceAll(regex, replacement);
+
     int i = 0;
     String[] schemes = {"http","https"};
     UrlValidator urlValidator = new UrlValidator(schemes);
     while (true) {
-		  i = textWithImagesReplaced.indexOf("<img src=", i);
+		  i = textWithMediaReplaced.indexOf(" src=\"", i);
 		  if (i == -1) {
 			 break;
 		  }
-		  int end_index = textWithImagesReplaced.indexOf("/>", i);
-		  String url = textWithImagesReplaced.substring(i + 10, end_index - 2);
+		  int end_index = textWithMediaReplaced.indexOf("\"", i + 7);
+		  String url = textWithMediaReplaced.substring(i + 6, end_index);
 		  if (!urlValidator.isValid(url)) {
 			 System.out.println("URL is not valid!");
 		  }
 		  i += 1;
     }
-
-    regex = "(https?://www.youtube.com/\\S+)";
-    replacement = "<iframe src=\"$1\" width=\"560\" height=\"315\"></iframe>";
-    String textWithMediaReplaced = textWithImagesReplaced.replaceAll(regex, replacement);
 
     Message message = new Message(user, textWithMediaReplaced);
     datastore.storeMessage(message);
