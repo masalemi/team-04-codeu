@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.apache.commons.validator.routines.UrlValidator;
+import java.util.regex.*;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -87,20 +88,15 @@ public class MessageServlet extends HttpServlet {
     replacement = "<iframe src=\"$1\" width=\"560\" height=\"315\"></iframe>";
     String textWithMediaReplaced = textWithImagesReplaced.replaceAll(regex, replacement);
 
-    int i = 0;
-    String[] schemes = {"http","https"};
-    UrlValidator urlValidator = new UrlValidator(schemes);
-    while (true) {
-		  i = textWithMediaReplaced.indexOf(" src=\"", i);
-		  if (i == -1) {
-			 break;
-		  }
-		  int end_index = textWithMediaReplaced.indexOf("\"", i + 7);
-		  String url = textWithMediaReplaced.substring(i + 6, end_index);
-		  if (!urlValidator.isValid(url)) {
-			 System.out.println("URL is not valid!");
-		  }
-		  i += 1;
+    Pattern pattern = Pattern.compile("src=(.*?)/>");
+    Matcher m = pattern.matcher(textWithMediaReplaced);
+    UrlValidator validator = new UrlValidator();
+    while (m.find()) {
+        String url = m.group(1);
+        url = url.substring(1, url.length() - 2);   //Strip off extra quotations
+        if (!validator.isValid(url)) {
+            System.out.println("URL " + url + " is not vaild.");
+        }
     }
 
     Message message = new Message(user, textWithMediaReplaced);
