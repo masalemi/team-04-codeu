@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.apache.commons.validator.routines.UrlValidator;
+import java.util.regex.*;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -79,27 +80,26 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
-    String regex = "(https?://\\S+\\.(png|jpg))";
-	String replacement = "<img src=\"$1\" />";
-	String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+    String regex = "(https?://\\S+\\.(png|jpg|gif))";
+    String replacement = "<img src=\"$1\" />";
+    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
 
-	int i = 0;
-	String[] schemes = {"http","https"};
-	UrlValidator urlValidator = new UrlValidator(schemes);
-	while (true) {
-		i = textWithImagesReplaced.indexOf("<img src=", i);
-		if (i == -1) {
-			break;
-		}
-		int end_index = textWithImagesReplaced.indexOf("/>", i);
-		String url = textWithImagesReplaced.substring(i + 10, end_index - 2);
-		if (!urlValidator.isValid(url)) {
-			System.out.println("URL is not valid!");
-		}
-		i += 1;
-	}
+    regex = "(https?://www.youtube.com/\\S+)";
+    replacement = "<iframe src=\"$1\" width=\"560\" height=\"315\"></iframe>";
+    String textWithMediaReplaced = textWithImagesReplaced.replaceAll(regex, replacement);
 
-    Message message = new Message(user, textWithImagesReplaced);
+    Pattern pattern = Pattern.compile("src=(.*?)/>");
+    Matcher m = pattern.matcher(textWithMediaReplaced);
+    UrlValidator validator = new UrlValidator();
+    while (m.find()) {
+        String url = m.group(1);
+        url = url.substring(1, url.length() - 2);   //Strip off extra quotations
+        if (!validator.isValid(url)) {
+            System.out.println("URL " + url + " is not vaild.");
+        }
+    }
+
+    Message message = new Message(user, textWithMediaReplaced);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
