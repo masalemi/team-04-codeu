@@ -79,7 +79,7 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-
+    String text = new String();
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
     String replacement = "<img src=\"$1\" />";
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
@@ -114,7 +114,7 @@ public class MessageServlet extends HttpServlet {
     int starCount = 0;
     //List<Character> list = new ArrayList<Character>();
     StringBuilder string = new StringBuilder();
-    
+
     for (char c : text.toCharArray()) {
       if (c == '~') {
         squiggleCount++;
@@ -128,15 +128,15 @@ public class MessageServlet extends HttpServlet {
   int dashNum = 0;
     int starNum = 0;
     for (char c : text.toCharArray()) {
-      
+
         if (c == '~') {
           squiggleNum++;
           if (squiggleNum % 2 != 0 && squiggleNum != squiggleCount) {
             string.append("<s>");
-            
+
           } else if (squiggleNum % 2 == 0){
             string.append("</s>");
-            
+
           }else {
             string.append('~');
           }
@@ -144,10 +144,10 @@ public class MessageServlet extends HttpServlet {
           dashNum++;
           if (dashNum % 2 != 0 && dashNum != dashCount) {
             string.append("<i>");
-           
+
           } else if (dashNum % 2 == 0){
             string.append("</i>");
-            
+
           } else {
             string.append('_');
           }
@@ -155,7 +155,7 @@ public class MessageServlet extends HttpServlet {
           starNum++;
           if (starNum % 2 != 0 && starNum != starCount) {
             string.append("<b>");
-            
+
           } else if (starNum % 2 == 0) {
             string.append("</b>");
             //starNum++;
@@ -165,11 +165,11 @@ public class MessageServlet extends HttpServlet {
         }  else {
           string.append(c);
         }
-        
-        
+
+
     }
-  
-  
+
+
     return string.toString();
 }
 
