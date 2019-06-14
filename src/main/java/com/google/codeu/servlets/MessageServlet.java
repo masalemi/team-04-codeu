@@ -29,6 +29,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.apache.commons.validator.routines.UrlValidator;
+import java.util.regex.*;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -58,7 +60,7 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getMessagesForUser(user);
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
@@ -76,11 +78,100 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+
+    String regex = "(https?://\\S+\\.(png|jpg|gif))";
+    String replacement = "<img src=\"$1\" />";
+    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+
+    regex = "(https?://www.youtube.com/\\S+)";
+    replacement = "<iframe src=\"$1\" width=\"560\" height=\"315\"></iframe>";
+    String textWithMediaReplaced = textWithImagesReplaced.replaceAll(regex, replacement);
+
+    Pattern pattern = Pattern.compile("src=(.*?)/>");
+    Matcher m = pattern.matcher(textWithMediaReplaced);
+    UrlValidator validator = new UrlValidator();
+    while (m.find()) {
+        String url = m.group(1);
+        url = url.substring(1, url.length() - 2);   //Strip off extra quotations
+        if (!validator.isValid(url)) {
+            System.out.println("URL " + url + " is not vaild.");
+        }
+    }
+
+    text = makeMarkdown(textWithMediaReplaced);
 
     Message message = new Message(user, text);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
   }
+
+
+  public static String makeMarkdown(String text) {
+    int squiggleCount = 0;
+    int dashCount = 0;
+    int starCount = 0;
+    //List<Character> list = new ArrayList<Character>();
+    StringBuilder string = new StringBuilder();
+    
+    for (char c : text.toCharArray()) {
+      if (c == '~') {
+        squiggleCount++;
+      } else if (c == '_') {
+        dashCount++;
+      } else if (c == '*') {
+        starCount++;
+      }
+    }
+    int squiggleNum = 0;
+  int dashNum = 0;
+    int starNum = 0;
+    for (char c : text.toCharArray()) {
+      
+        if (c == '~') {
+          squiggleNum++;
+          if (squiggleNum % 2 != 0 && squiggleNum != squiggleCount) {
+            string.append("<s>");
+            
+          } else if (squiggleNum % 2 == 0){
+            string.append("</s>");
+            
+          }else {
+            string.append('~');
+          }
+        } else if (c == '_') {
+          dashNum++;
+          if (dashNum % 2 != 0 && dashNum != dashCount) {
+            string.append("<i>");
+           
+          } else if (dashNum % 2 == 0){
+            string.append("</i>");
+            
+          } else {
+            string.append('_');
+          }
+        } else if (c == '*') {
+          starNum++;
+          if (starNum % 2 != 0 && starNum != starCount) {
+            string.append("<b>");
+            
+          } else if (starNum % 2 == 0) {
+            string.append("</b>");
+            //starNum++;
+          } else {
+            string.append('*');
+          }
+        }  else {
+          string.append(c);
+        }
+        
+        
+    }
+  
+  
+    return string.toString();
+}
+
+
 }
