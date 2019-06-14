@@ -8,6 +8,23 @@ function createMap(){
     zoom: 4
   });
 
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      map.setCenter(pos);
+      map.setZoom(10);
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+
   map.addListener('click', (event) => {
     createMarkerForEdit(event.latLng.lat(), event.latLng.lng());
   });
@@ -97,4 +114,12 @@ function createUfoSightingsMap(){
       createMarkerForDisplay(ufoSighting.lat, ufoSighting.lng, ufoSighting.content);
     });
   });
+}
+
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
 }
