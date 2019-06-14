@@ -30,6 +30,7 @@ public class UfoDataServlet extends HttpServlet {
       double lat = Double.parseDouble(cells[0]);
       double lng = Double.parseDouble(cells[1]);
 
+
       ufoSightingArray.add(gson.toJsonTree(new UfoSighting(lat, lng)));
     }
     scanner.close();
@@ -45,10 +46,12 @@ public class UfoDataServlet extends HttpServlet {
   private static class UfoSighting{
     double lat;
     double lng;
+    String content;
 
     private UfoSighting(double lat, double lng) {
       this.lat = lat;
       this.lng = lng;
+      this.content = "UFO";
     }
   }
 }
