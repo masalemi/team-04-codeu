@@ -31,6 +31,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import org.apache.commons.validator.routines.UrlValidator;
 import java.util.regex.*;
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import java.util.Map;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -79,6 +88,9 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    if (getUploadedFileUrl(request, "image") != null) {
+      userText += " <img src=\"" + getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_") + "\" />";
+    }
     String text = new String();
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
     String replacement = "<img src=\"$1\" />";
@@ -171,7 +183,35 @@ public class MessageServlet extends HttpServlet {
 
 
     return string.toString();
-}
+  }
 
+  private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName){
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("image");
+
+    // User submitted form without selecting a file, so we can't get a URL. (devserver)
+    if(blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    // Our form only contains a single file input, so get the first index.
+    BlobKey blobKey = blobKeys.get(0);
+
+    // User submitted form without selecting a file, so we can't get a URL. (live server)
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+
+    // We could check the validity of the file here, e.g. to make sure it's an image file
+    // https://stackoverflow.com/q/10779564/873165
+
+    // Use ImagesService to get a URL that points to the uploaded file.
+    ImagesService imagesService = ImagesServiceFactory.getImagesService();
+    ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+    return imagesService.getServingUrl(options);
+  }
 
 }
