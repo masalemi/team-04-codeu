@@ -87,7 +87,7 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
     if (getUploadedFileUrl(request, "image") != null) {
       userText += " <img src=\"" + getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_") + "\" />";
     }
@@ -137,7 +137,7 @@ public class MessageServlet extends HttpServlet {
       }
     }
     int squiggleNum = 0;
-  int dashNum = 0;
+    int dashNum = 0;
     int starNum = 0;
     for (char c : text.toCharArray()) {
 
@@ -177,11 +177,7 @@ public class MessageServlet extends HttpServlet {
         }  else {
           string.append(c);
         }
-
-
     }
-
-
     return string.toString();
   }
 
