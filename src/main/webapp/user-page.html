@@ -22,6 +22,12 @@ limitations under the License.
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/user-page-loader.js"></script>
+    <style>
+      /* Form is hidden by default. */
+      .hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body onload="buildUI();">
     <nav>
@@ -41,16 +47,17 @@ limitations under the License.
         <input type="submit" value="Submit">
       </form>
     </div>
-
-    <div id="message-form" class="hidden">
-      <form action="/messages" method="POST">
-        Enter a new message:
-        <br/>
-        <textarea name="text" id="message-input"></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-      </form>
-    </div>
+    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
+      Enter a new message:
+      <br/>
+      <textarea name="text" id="message-input"></textarea>
+      <br/>
+      Upload an image:
+      <br/>
+      <input type="file" name="image">
+      <br/>
+      <button>Submit</button>
+    </form>
     <hr/>
 
     <div id="message-container">Loading...</div>
