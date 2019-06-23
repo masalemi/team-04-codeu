@@ -24,6 +24,7 @@ public class Message {
   private UUID id;
   private String user;
   private String text;
+  private String imageLabel;
   private long timestamp;
 
   /**
@@ -55,5 +56,9 @@ public class Message {
 
   public long getTimestamp() {
     return timestamp;
+  }
+
+  public String getImageLabel() {
+    return imageLabel;
   }
 }
