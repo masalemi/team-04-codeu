@@ -113,7 +113,11 @@ public class MessageServlet extends HttpServlet {
 
     text = makeMarkdown(textWithMediaReplaced);
 
-    Message message = new Message(user, text);
+    ArrayList<String> labels = ArrayList<String>();
+
+    labels =
+
+    Message message = new Message(user, text, labels);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
