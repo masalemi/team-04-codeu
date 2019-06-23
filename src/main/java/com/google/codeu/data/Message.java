@@ -17,6 +17,9 @@
 package com.google.codeu.data;
 
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
+
 
 /** A single message posted by a user. */
 public class Message {
@@ -26,7 +29,7 @@ public class Message {
   private String text;
   private String imageLabel;
   private long timestamp;
-  private Arraylist<String> labels;
+  private ArrayList<String> labels;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} with {@code text} content. Generates a
@@ -60,7 +63,7 @@ public class Message {
     return timestamp;
   }
 
-  public ArrayList<String> getImageLabel() {
+  public ArrayList<String> getImageLabels() {
     return labels;
   }
 }
