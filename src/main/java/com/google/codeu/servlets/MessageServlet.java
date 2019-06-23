@@ -147,7 +147,7 @@ public class MessageServlet extends HttpServlet {
     }
 
     if (labels.size() >= 3) {
-      textWithMediaReplaced += "Top 3 Guesses:\n" + labels.get(0) + "\n" + labels.get(1) + "\n" + labels.get(2); 
+      textWithMediaReplaced += "Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2); 
     }
 
     text = makeMarkdown(textWithMediaReplaced);
