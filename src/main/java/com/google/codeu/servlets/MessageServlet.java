@@ -113,11 +113,12 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    ArrayList<String> labels = ArrayList<String>();
+    ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
     String uploadedFileUrl = getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_");
-    if (getUploadedFileUrl(request, "image") != null) {
+    BlobKey blobKey = getBlobKey(request, "image");
+    if (uploadedFileUrl != null) {
       userText += " <img src=\"" + uploadedFileUrl + "\" />";
       byte[] blobBytes = getBlobBytes(blobKey);
       List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
@@ -248,6 +249,29 @@ public class MessageServlet extends HttpServlet {
     return imagesService.getServingUrl(options);
   }
 
+  private BlobKey getBlobKey(HttpServletRequest request, String formInputElementName){
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+    List<BlobKey> blobKeys = blobs.get("image");
+
+    // User submitted form without selecting a file, so we can't get a BlobKey. (devserver)
+    if(blobKeys == null || blobKeys.isEmpty()) {
+      return null;
+    }
+
+    // Our form only contains a single file input, so get the first index.
+    BlobKey blobKey = blobKeys.get(0);
+
+    // User submitted form without selecting a file, so the BlobKey is empty. (live server)
+    BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+    if (blobInfo.getSize() == 0) {
+      blobstoreService.delete(blobKey);
+      return null;
+    }
+
+    return blobKey;
+  }
+
   private byte[] getBlobBytes(BlobKey blobKey) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     ByteArrayOutputStream outputBytes = new ByteArrayOutputStream();
@@ -298,7 +322,5 @@ public class MessageServlet extends HttpServlet {
 
     return imageResponse.getLabelAnnotationsList();
   }
-
-
 
 }
