@@ -89,8 +89,9 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
+    String uploadedFileUrl = getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_");
     if (getUploadedFileUrl(request, "image") != null) {
-      userText += " <img src=\"" + getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_") + "\" />";
+      userText += " <img src=\"" + uploadedFileUrl + "\" />";
     }
     String text = new String();
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
@@ -108,15 +109,19 @@ public class MessageServlet extends HttpServlet {
         String url = m.group(1);
         url = url.substring(1, url.length() - 2);   //Strip off extra quotations
         if (!validator.isValid(url)) {
-            System.out.println("URL " + url + " is not vaild.");
+          System.out.println("URL " + url + " is not vaild.");
         }
     }
 
-    text = makeMarkdown(textWithMediaReplaced);
-
     ArrayList<String> labels = ArrayList<String>();
 
-    labels =
+    labels = 
+
+    if (labels.size() >= 3) {
+      textWithMediaReplaced += "Top 3 Guesses:\n" + labels[0] + "\n" + labels[1] + "\n" + labels[2]; 
+    }
+
+    text = makeMarkdown(textWithMediaReplaced);
 
     Message message = new Message(user, text, labels);
     datastore.storeMessage(message);
