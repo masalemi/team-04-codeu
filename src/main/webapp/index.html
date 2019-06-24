@@ -46,21 +46,31 @@ limitations under the License.
       <div id="map"></div>
       <p>This page shows a Google Map!</p>
     </div>
- 
-    <iframe src="/feed.html" 
-      frameborder="0" 
-      scrolling="yes" 
-      width="180px" 
-      height="512" 
+    <div>
+      <h1>Sentiment Analysis</h1>
+      <p>Type a message and click submit to analyze its sentiment:</p>
+
+      <form method="POST" action="/sentiment">
+        <textarea name="message"></textarea>
+        <br/>
+        <button>Submit</button>
+      </form>
+    </div>
+
+    <iframe src="/feed.html"
+      frameborder="0"
+      scrolling="yes"
+      width="180px"
+      height="512"
       align="left">
     </iframe>
-    <iframe src="/feed.html" 
-      frameborder="0" 
-      scrolling="yes" 
-      width="180px" 
-      height="512" 
+    <iframe src="/feed.html"
+      frameborder="0"
+      scrolling="yes"
+      width="180px"
+      height="512"
       align="right">
     </iframe>
-    
+
 </body>
 </html>
