@@ -24,6 +24,12 @@ limitations under the License.
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
     <script src="/js/user-page-loader.js"></script>
+    <style>
+      /* Form is hidden by default. */
+      .hidden {
+        display: none;
+      }
+    </style>
   </head>
   <body onload="buildUI();">
     <nav>
@@ -51,7 +57,11 @@ limitations under the License.
         <br/>
         <textarea name="text" id="message-input"></textarea>
         <br/>
-        <input type="submit" value="Submit">
+        Upload an image:
+        <br/>
+        <input type="file" name="image">
+        <br/>
+        <button>Submit</button>
       </form>
     </div>
     </div>
