@@ -56,6 +56,9 @@ import com.google.cloud.vision.v1.EntityAnnotation;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.protobuf.ByteString;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -107,18 +110,22 @@ public class MessageServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    // Redirect to index.html if not logged in
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
     }
 
+    // Get user, message text and image url
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
-    String uploadedFileUrl = getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_");
+    String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
+    // Get image labels
     if (uploadedFileUrl != null) {
+      uploadedFileUrl = uploadedFileUrl.replace("<i>", "_").replace("</i>", "_");
       userText += " <img src=\"" + uploadedFileUrl + "\" />";
       byte[] blobBytes = getBlobBytes(blobKey);
       List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
@@ -146,13 +153,32 @@ public class MessageServlet extends HttpServlet {
         }
     }
 
+    // Message text sentiment analysis
+    float sentimentScore = (float) 0.0;
+    if (userText == "") sentimentScore = (float) 2.0;
+    else{
+      Document doc = Document.newBuilder()
+        .setContent(userText).setType(Document.Type.PLAIN_TEXT).build();
+      LanguageServiceClient languageService = LanguageServiceClient.create();
+      Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+      sentimentScore = sentiment.getScore();
+      languageService.close();
+    }
+
     if (labels.size() >= 3) {
-      textWithMediaReplaced += "Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2); 
+      textWithMediaReplaced += "Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2);
+    }
+
+    if (sentimentScore > -1.0 && sentimentScore < 1.0){
+      if(sentimentScore > 0) textWithMediaReplaced += "<br/>Attitude Guess: Positive";
+      else if (sentimentScore < 0) textWithMediaReplaced += "<br/>Attitude Guess: Negative";
+      else textWithMediaReplaced += "<br/>Attitude Guess: Neutral";
     }
 
     text = makeMarkdown(textWithMediaReplaced);
 
-    Message message = new Message(user, text, labels);
+    // Store message in datastore
+    Message message = new Message(user, text, labels, sentimentScore);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
