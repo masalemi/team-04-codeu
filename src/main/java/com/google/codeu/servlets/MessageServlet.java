@@ -116,10 +116,10 @@ public class MessageServlet extends HttpServlet {
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
-    String uploadedFileUrl = getUploadedFileUrl(request, "image").replace("<i>", "_").replace("</i>", "_");
+    String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
     if (uploadedFileUrl != null) {
-      userText += " <img src=\"" + uploadedFileUrl + "\" />";
+      userText += " <img src=\"" + uploadedFileUrl.replace("<i>", "_").replace("</i>", "_") + "\" />";
       byte[] blobBytes = getBlobBytes(blobKey);
       List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
       for(EntityAnnotation label : imageLabels){
