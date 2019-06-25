@@ -1,6 +1,7 @@
 package com.google.codeu.data;
 
 import java.util.UUID;
+import java.util.ArrayList;
 
 public class Restaurant {
 
