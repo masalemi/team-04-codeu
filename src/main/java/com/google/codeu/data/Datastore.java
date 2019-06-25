@@ -84,44 +84,68 @@ public class Datastore {
     return messages;
   }
 
-
   /** Stores the User in Datastore. */
- public void storeUser(User user) {
-  Entity userEntity = new Entity("User", user.getEmail());
-  userEntity.setProperty("email", user.getEmail());
-  userEntity.setProperty("aboutMe", user.getAboutMe());
-  datastore.put(userEntity);
- }
+  public void storeUser(User user) {
+    Entity userEntity = new Entity("User", user.getEmail());
+    userEntity.setProperty("email", user.getEmail());
+    userEntity.setProperty("aboutMe", user.getAboutMe());
+    datastore.put(userEntity);
+  }
 
  /**
   * Returns the User owned by the email address, or
   * null if no matching User was found.
   */
- public User getUser(String email) {
+  public User getUser(String email) {
+    Query query = new Query("User")
+      .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+    if (userEntity == null) {
+      return null;
+    }
+    String aboutMe = (String) userEntity.getProperty("aboutMe");
+    User user = new User(email, aboutMe);
 
-  Query query = new Query("User")
-    .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
-  PreparedQuery results = datastore.prepare(query);
-  Entity userEntity = results.asSingleEntity();
-  if(userEntity == null) {
-   return null;
+    return user;
   }
 
-  String aboutMe = (String) userEntity.getProperty("aboutMe");
-  User user = new User(email, aboutMe);
+  public void storeRestaurant(Restaurant restaurant) {
+    Entity restaurantEntity = new Entity("Restaurant", restaurant.getId().toString());
+    restaurantEntity.setProperty("name", restaurant.getName());
+    restaurantEntity.setProperty("description", restaurant.getDescription());
+    restaurantEntity.setProperty("images", restaurant.getImages());
 
-  return user;
- }
-
-public Set<String> getUsers(){
-  Set<String> users = new HashSet<>();
-  Query query = new Query("Message");
-  PreparedQuery results = datastore.prepare(query);
-  for(Entity entity : results.asIterable()) {
-    users.add((String) entity.getProperty("user"));
+    datastore.put(restaurantEntity);
   }
-  return users;
-}
+
+  public void getRestaurant(UUID id) {
+    Query query = new Query("Restaurant")
+      .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
+    PreparedQuery results = datastore.prepare(query);
+    Entity restaurantEntity = results.asSingleEntity();
+    if (restaurantEntity == null) {
+      return null;
+    }
+
+    String name = (String) restaurantEntity.getProperty("name");
+    String description = (String) restaurantEntity.getProperty("description");
+    ArrayList<String> images = restaurantEntity.getProperty("images");
+
+    Restaurant restaurant = new Restaurant(id, name, description, images);
+
+    return restaurant;
+  }
+
+  public Set<String> getUsers(){
+    Set<String> users = new HashSet<>();
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    for(Entity entity : results.asIterable()) {
+      users.add((String) entity.getProperty("user"));
+    }
+    return users;
+  }
 
   /** Returns the total number of messages for all users. */
   public int getTotalMessageCount(){
