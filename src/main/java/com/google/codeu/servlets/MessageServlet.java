@@ -20,6 +20,8 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.Restaurant;
+import java.util.UUID;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -153,6 +155,7 @@ public class MessageServlet extends HttpServlet {
     text = makeMarkdown(textWithMediaReplaced);
 
     Message message = new Message(user, text, labels);
+    Restaurant r = new Restaurant(UUID.randomUUID(), "a", "b", new ArrayList<String>());
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);

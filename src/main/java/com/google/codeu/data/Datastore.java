@@ -119,7 +119,7 @@ public class Datastore {
     datastore.put(restaurantEntity);
   }
 
-  public void getRestaurant(UUID id) {
+  public Restaurant getRestaurant(UUID id) {
     Query query = new Query("Restaurant")
       .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
     PreparedQuery results = datastore.prepare(query);
