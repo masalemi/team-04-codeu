@@ -69,10 +69,16 @@ limitations under the License.
     </dependency>
 
     <dependency>
-  <groupId>com.google.cloud</groupId>
-  <artifactId>google-cloud-vision</artifactId>
-  <version>1.55.0</version>
-</dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-language</artifactId>
+      <version>1.55.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-vision</artifactId>
+      <version>1.55.0</version>
+    </dependency>
 
   </dependencies>
 
