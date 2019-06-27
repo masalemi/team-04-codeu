@@ -130,7 +130,7 @@ public class Datastore {
 
     String name = (String) restaurantEntity.getProperty("name");
     String description = (String) restaurantEntity.getProperty("description");
-    ArrayList<String> images = restaurantEntity.getProperty("images");
+    ArrayList<String> images = (ArrayList<String>) restaurantEntity.getProperty("images");
 
     Restaurant restaurant = new Restaurant(id, name, description, images);
 
