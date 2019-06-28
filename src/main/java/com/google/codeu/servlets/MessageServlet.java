@@ -125,8 +125,7 @@ public class MessageServlet extends HttpServlet {
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
     if (uploadedFileUrl != null) {
-      uploadedFileUrl = uploadedFileUrl.replace("<i>", "_").replace("</i>", "_");
-      userText += " <img src=\"" + uploadedFileUrl + "\" />";
+      userText += " <img src=\"" + uploadedFileUrl.replace("<i>", "_").replace("</i>", "_") + "\" />";
       byte[] blobBytes = getBlobBytes(blobKey);
       List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
       for(EntityAnnotation label : imageLabels){
