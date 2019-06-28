@@ -19,9 +19,10 @@ limitations under the License.
   <head>
     <meta charset="UTF-8">
     <title>CodeU 2019 Starter Project</title>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/map.css">
     <link rel="shortcut icon" href="#">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <script src="/js/navigation-loader.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCE3UVG8ziLuOBJXWJIqX-Y9BUzbquqgXU"></script>
     <script src="/js/map.js"></script>
@@ -42,26 +43,29 @@ limitations under the License.
     <p>This is your code now! Feel free to make changes, and don't be afraid to get creative!
     You could start by modifying this page to tell the world more about your team.</p>
 
+    <h1>Hello Google Maps</h1>
     <div class="map-container">
-      <h1>Hello Google Maps</h1>
       <div id="map"></div>
-      <p>This page shows a Google Map!</p>
     </div>
 
-    <iframe src="/feed.html"
-      frameborder="0"
-      scrolling="yes"
-      width="180px"
-      height="512"
-      align="left">
-    </iframe>
-    <iframe src="/feed.html"
-      frameborder="0"
-      scrolling="yes"
-      width="180px"
-      height="512"
-      align="right">
-    </iframe>
+    <p>This page shows a Google Map!</p>
+
+    <div>
+      <div class = "two-column">
+        <iframe src="/feed.html"
+          frameborder="0"
+          scrolling="yes"
+          height="512">
+        </iframe>
+      </div>
+      <div class = "two-column">
+        <iframe src="/feed.html"
+          frameborder="0"
+          scrolling="yes"
+          height="512">
+        </iframe>
+      </div>
+    </div>
 
 </body>
 </html>

@@ -19,8 +19,9 @@ limitations under the License.
   <head>
     <title>User Page</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/user-page.css">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
     <script src="/js/user-page-loader.js"></script>
     <style>
@@ -48,20 +49,25 @@ limitations under the License.
         <input type="submit" value="Submit">
       </form>
     </div>
-    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
-      Enter a new message:
-      <br/>
-      <textarea name="text" id="message-input"></textarea>
-      <br/>
-      Upload an image:
-      <br/>
-      <input type="file" name="image">
-      <br/>
-      <button>Submit</button>
-    </form>
+
+    <div class="message-form-container">
+    <div id="message-form" class="hidden">
+      <form action="/messages" method="POST">
+        Enter a new message:
+        <br/>
+        <textarea name="text" id="message-input"></textarea>
+        <br/>
+        Upload an image:
+        <br/>
+        <input type="file" name="image">
+        <br/>
+        <button>Submit</button>
+      </form>
+    </div>
+    </div>
     <hr/>
 
-    <div id="message-container">Loading...</div>
+    <div class="message-container">Loading...</div>
 
   </body>
 </html>

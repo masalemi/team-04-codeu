@@ -14,11 +14,25 @@
  * limitations under the License.
  */
 
+
+.message-form-container {
+   height: 100px;
+   display: flex;
+   justify-content: center;
+ }
+
 /* Set the size of the message input to be 100 pixels high
    and will fill the width of its parent element. */
 #message-input {
   height: 100px;
-  width: 100%;
+  width: 99%;
+  text-align: center;
+}
+
+.message-container {
+  padding: inherit;
+  float: none;
+  clear: both;
 }
 
 /* Give each message a rounded border. */
@@ -45,6 +59,13 @@
   display: block;
   margin-top: 25px;
   max-width: 75%;
+}
+
+input[type=submit] {
+  background-color: #ffe8c2;
+  border: none;
+  height: 50px;
+  width: 100px;
 }
 
 /* Use this to hide certain elements like forms if the

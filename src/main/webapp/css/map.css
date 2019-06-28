@@ -1,5 +1,12 @@
+.map-container {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #map{
   width: 500px;
   height: 500px;
   border: thin solid black;
+  text-align: center;
 }

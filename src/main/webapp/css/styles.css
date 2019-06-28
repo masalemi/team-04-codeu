@@ -1,0 +1,59 @@
+body {
+  margin: 0;
+  text-align: center;
+  background: #fffff5;
+  font-family: 'Montserrat', sans-serif;
+}
+
+nav {
+  background-color: #3e6048;
+  text-align: left;
+  padding: 5px;
+}
+
+/* Remove bullet points from navigation bar. */
+nav ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+nav a {
+  color: white;
+}
+
+/* Keep navigation menu on one line. */
+nav li {
+  display: inline-block;
+  margin-right: 10px
+}
+
+h2 {
+  margin: 0;
+}
+
+ul {
+  list-style-position: inside;
+}
+
+#content {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.two-column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.hidden {
+  display: none;
+}
