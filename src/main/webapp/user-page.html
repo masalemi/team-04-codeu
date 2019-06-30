@@ -51,8 +51,7 @@ limitations under the License.
     </div>
 
     <div class="message-form-container">
-    <div id="message-form" class="hidden">
-      <form action="/messages" method="POST">
+    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
         Enter a new message:
         <br/>
         <textarea name="text" id="message-input"></textarea>
@@ -63,7 +62,6 @@ limitations under the License.
         <br/>
         <button>Submit</button>
       </form>
-    </div>
     </div>
     <hr/>
 
