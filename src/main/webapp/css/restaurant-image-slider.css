@@ -523,11 +523,11 @@ Project slider navigation
   left: auto;
 }
 .cd-slider-navigation a.prev {
-  -webkit-transform: translateY(0) rotate(180deg);
-  -moz-transform: translateY(0) rotate(180deg);
-  -ms-transform: translateY(0) rotate(180deg);
-  -o-transform: translateY(0) rotate(180deg);
-  transform: translateY(0) rotate(180deg);
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
+  transform: translateY(0);
 }
 
 @media only screen and (min-width: 900px) {
