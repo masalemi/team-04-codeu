@@ -5,25 +5,26 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-nav {
+.nav {
   background-color: #3e6048;
   text-align: left;
   padding: 5px;
 }
 
 /* Remove bullet points from navigation bar. */
-nav ul {
+.nav ul {
   list-style-type: none;
   padding-left: 0;
 }
 
-nav a {
+.nav a {
   color: white;
 }
 
 /* Keep navigation menu on one line. */
-nav li {
+.nav li {
   display: inline-block;
+  list-style-type: none;
   margin-right: 10px
 }
 
@@ -33,6 +34,7 @@ h2 {
 
 ul {
   list-style-position: inside;
+  list-style-type: none;
 }
 
 #content {
