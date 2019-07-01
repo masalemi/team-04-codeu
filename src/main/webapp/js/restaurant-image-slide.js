@@ -20,10 +20,12 @@ jQuery(document).ready(function(){
 
 	//go to next/pre slide - clicking on the next/prev arrow
 	sliderNav.on('click', '.next', function(){
-		nextSides(projectsSlider);
+		var mq = checkMQ();
+		if( !(sliderNav.find('.next').hasClass('inactive')) && (mq == 'desktop') ) nextSides(projectsSlider);
 	});
 	sliderNav.on('click', '.prev', function(){
-		prevSides(projectsSlider);
+		var mq = checkMQ();
+		if ( !(sliderNav.find('.prev').hasClass('inactive')) && (mq == 'desktop') ) prevSides(projectsSlider);
 	});
 
 	projectsSlider.on('swipeleft', function(){
@@ -133,6 +135,8 @@ jQuery(document).ready(function(){
 	function updateNavigation() {
 		//update visibility of next/prev buttons according to the visible slides
 		var current = projectsContainer.find('li.current');
+		(current.is(':first-child')) ? sliderNav.find('.prev').addClass('inactive') : sliderNav.find('.prev').removeClass('inactive');
+		(current.nextAll('li').length < 3 ) ? sliderNav.find('.next').addClass('inactive') : sliderNav.find('.next').removeClass('inactive');
 	}
 
 	function setTranslateValue(item, translate) {
