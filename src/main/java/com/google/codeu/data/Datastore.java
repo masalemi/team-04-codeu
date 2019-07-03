@@ -47,6 +47,7 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
+    messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
 
     datastore.put(messageEntity);
   }
@@ -112,6 +113,7 @@ public class Datastore {
 
   public void storeRestaurant(Restaurant restaurant) {
     Entity restaurantEntity = new Entity("Restaurant", restaurant.getId().toString());
+    restaurantEntity.setProperty("id", restaurant.getId().toString());
     restaurantEntity.setProperty("name", restaurant.getName());
     restaurantEntity.setProperty("description", restaurant.getDescription());
     restaurantEntity.setProperty("images", restaurant.getImages());
@@ -121,7 +123,7 @@ public class Datastore {
 
   public Restaurant getRestaurant(UUID id) {
     Query query = new Query("Restaurant")
-      .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id));
+      .setFilter(new Query.FilterPredicate("id", FilterOperator.EQUAL, id.toString()));
     PreparedQuery results = datastore.prepare(query);
     Entity restaurantEntity = results.asSingleEntity();
     if (restaurantEntity == null) {
@@ -285,6 +287,14 @@ public class Datastore {
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+            .addSort("timestamp", SortDirection.DESCENDING);
+    return getMessagesFromQuery(query);
+  }
+
+  public List<Message> getMessagesForRestaurant(UUID restaurantId) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("restaurantId", FilterOperator.EQUAL, restaurantId.toString()))
             .addSort("timestamp", SortDirection.DESCENDING);
     return getMessagesFromQuery(query);
   }
