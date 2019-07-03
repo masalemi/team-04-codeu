@@ -64,7 +64,7 @@ public class RestaurantServlet extends HttpServlet {
   }
 
   /**
-   * Responds with the "about me" section for a particular user.
+   * Responds with the information about a specific restaurant.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -91,7 +91,7 @@ public class RestaurantServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /** Stores a new {@link Restaurant}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 

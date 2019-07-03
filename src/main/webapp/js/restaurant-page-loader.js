@@ -62,7 +62,7 @@ function fetchRestaurantInfo(){
 //           messagesContainer.innerHTML = '';
 //         }
 //         messages.forEach((message) => {
-//           const messageDiv = buildMessageDiv(message);
+//           const messageDiv = buildReviewDiv(message);
 //           messagesContainer.appendChild(messageDiv);
 //         });
 //       });
@@ -83,13 +83,14 @@ function fetchRestaurantInfo(){
        messageContainer.innerHTML = '';  
       }
       messages.forEach((message) => {  
-       const messageDiv = buildMessageDiv(message);
+       const messageDiv = buildReviewDiv(message);
        messageContainer.appendChild(messageDiv);
       });
     });
   }
-  
-  // function buildMessageDiv(message){
+  // This is an alternative way to format a message, here for reference
+
+  // function buildReviewDiv(message){
   //  const usernameDiv = document.createElement('div');
   //  usernameDiv.classList.add("left-align");
   //  usernameDiv.appendChild(document.createTextNode(message.user));
@@ -120,7 +121,7 @@ function fetchRestaurantInfo(){
  * @param {Message} message
  * @return {Element}
  */
-function buildMessageDiv(message) {
+function buildReviewDiv(message) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
   headerDiv.appendChild(document.createTextNode(
