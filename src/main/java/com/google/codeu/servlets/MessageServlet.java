@@ -82,14 +82,10 @@ public class MessageServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    System.out.println(1);
-
     response.setContentType("application/json");
 
     String user = request.getParameter("user");
     String restaurantId = request.getParameter("restaurantId");
-
-    System.out.println(restaurantId);
 
     if ((user == null || user.equals("")) && (restaurantId == null || restaurantId.equals(""))) {
       // Request is invalid, return empty array
@@ -98,23 +94,15 @@ public class MessageServlet extends HttpServlet {
     }
 
     List<Message> messages;
-    System.out.println(2);
     if ((user == null || user.equals(""))) {
-      System.out.println(3);
       messages = datastore.getMessagesForRestaurant(UUID.fromString(restaurantId));
     }
     else {
-      System.out.println(4);
       messages = datastore.getMessagesForUser(user);
     }
 
-    System.out.println("len");
-    System.out.println(messages.size());
-
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-
-    System.out.println(json);
 
     response.getWriter().println(json);
   }
@@ -122,8 +110,6 @@ public class MessageServlet extends HttpServlet {
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    System.out.println(2);
 
     response.setContentType("application/json");
 
