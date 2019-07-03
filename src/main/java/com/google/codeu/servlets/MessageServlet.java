@@ -41,14 +41,6 @@ import java.util.Map;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
-import com.google.appengine.api.blobstore.BlobInfo;
-import com.google.appengine.api.blobstore.BlobInfoFactory;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
@@ -70,6 +62,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -89,19 +82,39 @@ public class MessageServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    System.out.println(1);
+
     response.setContentType("application/json");
 
     String user = request.getParameter("user");
+    String restaurantId = request.getParameter("restaurantId");
 
-    if (user == null || user.equals("")) {
+    System.out.println(restaurantId);
+
+    if ((user == null || user.equals("")) && (restaurantId == null || restaurantId.equals(""))) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessagesForUser(user);
+    List<Message> messages;
+    System.out.println(2);
+    if ((user == null || user.equals(""))) {
+      System.out.println(3);
+      messages = datastore.getMessagesForRestaurant(UUID.fromString(restaurantId));
+    }
+    else {
+      System.out.println(4);
+      messages = datastore.getMessagesForUser(user);
+    }
+
+    System.out.println("len");
+    System.out.println(messages.size());
+
     Gson gson = new Gson();
     String json = gson.toJson(messages);
+
+    System.out.println(json);
 
     response.getWriter().println(json);
   }
@@ -110,9 +123,13 @@ public class MessageServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    System.out.println(2);
+
+    response.setContentType("application/json");
+
     // Redirect to index.html if not logged in
     UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
+    if (!userService.isUserLoggedIn() && request.getParameter("restaurantId") == null) {
       response.sendRedirect("/index.html");
       return;
     }
@@ -176,11 +193,24 @@ public class MessageServlet extends HttpServlet {
 
     text = makeMarkdown(textWithMediaReplaced);
 
-    // Store message in datastore
-    Message message = new Message(user, text, labels, sentimentScore);
-    datastore.storeMessage(message);
+    String restaurantId = request.getParameter("restaurantId");
 
-    response.sendRedirect("/user-page.html?user=" + user);
+    Message message = null;
+
+    if (restaurantId == null) {
+      message = new Message(user, text, labels, sentimentScore, null);
+    }
+    else {
+      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId));
+    }
+    // Store message in datastore
+    datastore.storeMessage(message);
+    if (restaurantId != null) {
+      response.sendRedirect("/restaurant-page.html?restaurantId=" + restaurantId);
+    }
+    else {
+      response.sendRedirect("/user-page.html?user=" + user);
+    }
   }
 
 
