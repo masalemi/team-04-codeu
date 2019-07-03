@@ -6,10 +6,12 @@
       <link rel="stylesheet" href="/css/styles.css">
       <link rel="stylesheet" href="/css/restaurant-image-slider.css">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+      <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
       <script src="js/modernizr.js"></script>
+      <script src="js/restaurant-page-loader.js"></script>
     </head>
 
-    <body>
+    <body onload="buildRestaurant();">
 
       <nav class="nav">
         <ul id="navigation">
@@ -66,5 +68,23 @@
       <script src="js/jQuery-2.1.4.js"></script>
       <script src="js/jquery.mobile.custom.min.js"></script>
       <script src="js/restaurant-image-slide.js"></script>
+
+      <div id="description-container">Loading...</div>
+
+      <div class="message-form-container">
+      <form id="review-form" class="hidden" method="POST" enctype="multipart/form-data">
+          Enter a new message:
+          <br/>
+          <textarea name="text" id="message-input"></textarea>
+          <br/>
+          Upload an image:
+          <br/>
+          <input type="file" name="image">
+          <br/>
+          <button>Submit</button>
+        </form>
+
+        <div id="message-container">Loading...</div>
+      </div>
     </body>
 </html>
