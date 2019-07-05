@@ -31,6 +31,7 @@ public class Message {
   private long timestamp;
   private ArrayList<String> labels;
   private float sentimentScore;
+  private UUID restaurantId;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} with {@code text} content. Generates a
@@ -38,32 +39,29 @@ public class Message {
    */
 
   public Message(String user, String text) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0);
-  }
-
-  public Message(String user, String text, ArrayList<String> labels) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, (float) 2.0);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0, null);
   }
 
   public Message(String user, String text, ArrayList<String> labels, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, null);
+  }
+
+  public Message(String user, String text, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, restaurantId);
   }
 
   public Message(UUID id, String user, String text, long timestamp) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0);
+    this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null);
   }
 
-  public Message(UUID id, String user, String text, long timestamp, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), sentimentScore);
-  }
-
-  public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore) {
+  public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
     this.id = id;
     this.user = user;
     this.text = text;
     this.timestamp = timestamp;
     this.labels = labels;
     this.sentimentScore = sentimentScore;
+    this.restaurantId = restaurantId;
   }
 
   public UUID getId() {
@@ -88,5 +86,9 @@ public class Message {
 
   public float getSentimentScore(){
     return sentimentScore;
+  }
+
+  public UUID getRestaurant() {
+    return restaurantId;
   }
 }

@@ -21,9 +21,8 @@ limitations under the License.
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/user-page.css">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <script src="/js/add-restaurant-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
-    <script src="/js/user-page-loader.js"></script>
     <style>
       /* Form is hidden by default. */
       .hidden {
@@ -31,7 +30,7 @@ limitations under the License.
       }
     </style>
   </head>
-  <body onload="buildUI();">
+  <body onload="addRestaurantUI();">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
@@ -39,24 +38,21 @@ limitations under the License.
         <li><a href="/stats.html">Statistics</a></li>
       </ul>
     </nav>
-    <h1 id="page-title">User Page</h1>
+    <h1 id="page-title">Add Restaurant Page</h1>
 
-    <div id="about-me-container">Loading...</div>
-    <div id="about-me-form" class="hidden">
-      <form action="/about" method="POST">
-        <textarea name="about-me" id="about-me-input" placeholder="about me"></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-      </form>
     </div>
 
     <div class="message-form-container">
-    <form id="message-form" class="hidden" method="POST" enctype="multipart/form-data">
-        Enter a new message:
+    <form id="restaurant-form" class="hidden" method="POST" enctype="multipart/form-data">
+        Enter a name:
         <br/>
-        <textarea name="text" id="message-input"></textarea>
+        <textarea name="name" id="restaurant-name"></textarea>
         <br/>
-        Upload an image:
+        Enter a description:
+        <br/>
+        <textarea name="description" id="restaurant-description"></textarea>
+        <br/>
+        Upload image(s):
         <br/>
         <input type="file" name="image">
         <br/>
@@ -64,8 +60,6 @@ limitations under the License.
       </form>
     </div>
     <hr/>
-
-    <div class="message-container">Loading...</div>
 
   </body>
 </html>

@@ -14,20 +14,13 @@ import javax.servlet.http.HttpServletResponse;
  * If this sounds confusing, try running a devserver and navigating to /blobstore-upload-url
  * to see the Blobstore URL.
  */
-@WebServlet("/blobstore-upload-url")
-public class BlobstoreUploadUrlServlet extends HttpServlet {
+@WebServlet("/blobstore-upload-url-r")
+public class BlobstoreRestaurantUploadServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String restaurantId = request.getParameter("restaurantId");
-    String uploadUrl = null;
-    if (restaurantId != null) {
-    	uploadUrl = blobstoreService.createUploadUrl("/messages?restaurantId=" + restaurantId);
-    }
-    else {
-    	uploadUrl = blobstoreService.createUploadUrl("/messages");
-    }
+    String uploadUrl = blobstoreService.createUploadUrl("/restaurant");
 
     response.setContentType("text/html");
     response.getOutputStream().println(uploadUrl);
