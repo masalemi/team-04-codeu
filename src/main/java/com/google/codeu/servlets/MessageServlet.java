@@ -170,7 +170,7 @@ public class MessageServlet extends HttpServlet {
     }
 
     if (labels.size() >= 3) {
-      textWithMediaReplaced += "Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2);
+      textWithMediaReplaced += "<br/>Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2);
     }
 
     if (sentimentScore > -1.0 && sentimentScore < 1.0){
