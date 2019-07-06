@@ -126,6 +126,9 @@ public class MessageServlet extends HttpServlet {
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
+    System.out.println("start");
+    System.out.println(userText);
+    System.out.println("end");
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
@@ -178,6 +181,11 @@ public class MessageServlet extends HttpServlet {
       else if (sentimentScore < 0) textWithMediaReplaced += "<br/>Attitude Guess: Negative";
       else textWithMediaReplaced += "<br/>Attitude Guess: Neutral";
     }
+
+    regex = "@@(.+?)(?=(<|&))";
+    replacement = "<a href=\"/user-page.html?user=$1\">$1</a>";
+    textWithMediaReplaced = textWithMediaReplaced.replaceAll(regex, replacement);
+    System.out.println(textWithMediaReplaced);
 
     textWithMediaReplaced += "<br/><a href=\"/user-page.html?user=" + user + "\">User Page</a>";
 
