@@ -113,9 +113,11 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
+    String restaurantId = request.getParameter("restaurantId");
+
     // Redirect to index.html if not logged in
     UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn() && request.getParameter("restaurantId") == null) {
+    if (!userService.isUserLoggedIn() && restaurantId == null) {
       response.sendRedirect("/index.html");
       return;
     }
@@ -177,9 +179,13 @@ public class MessageServlet extends HttpServlet {
       else textWithMediaReplaced += "<br/>Attitude Guess: Neutral";
     }
 
-    text = makeMarkdown(textWithMediaReplaced);
+    textWithMediaReplaced += "<br/><a href=\"/user-page.html?user=" + user + "\">User Page</a>";
 
-    String restaurantId = request.getParameter("restaurantId");
+    if (restaurantId != null) {
+      textWithMediaReplaced += "<br/><a href=\"/restaurant-page.html?restaurantId=" + restaurantId + "\">Restaurant Page</a>";
+    }
+
+    text = makeMarkdown(textWithMediaReplaced);
 
     Message message = null;
 
