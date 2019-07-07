@@ -27,7 +27,7 @@ public class Message {
   private UUID id;
   private String user;
   private String text;
-  private String imageLabel;
+  //private String imageLabel;
   private long timestamp;
   private ArrayList<String> labels;
   private float sentimentScore;
@@ -52,6 +52,10 @@ public class Message {
 
   public Message(UUID id, String user, String text, long timestamp) {
     this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null);
+  }
+
+  public Message(UUID id, String user, String text, float sentimentScore, long timestamp) {
+    this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, null);
   }
 
   public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
@@ -90,5 +94,19 @@ public class Message {
 
   public UUID getRestaurant() {
     return restaurantId;
+  }
+
+  @Override
+  public String toString() {
+    String returnString = "";
+    returnString += "UUID: " + id + "\n";
+    returnString += "user: " + user + "\n";
+    returnString += "text: " + text + "\n";
+    returnString += "timestamp: " + timestamp + "\n";
+    returnString += "labels: " + labels.toString() + "\n";
+    returnString += "sentimentScore: " + sentimentScore + "\n";
+    returnString += "restaurantID: " + restaurantId + "\n";
+    
+    return returnString;
   }
 }
