@@ -96,7 +96,7 @@ public class RestaurantServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     // String restaurantId = request.getParameter("restaurantId");
-    String restaurantId = UUID.randomUUID().toString();
+    String restaurantId = request.getRestaurant().toString();
     String name = request.getParameter("name");
     String description = request.getParameter("description");
     // String image_string = request.getParameter("images");
@@ -114,7 +114,7 @@ public class RestaurantServlet extends HttpServlet {
 
     Restaurant restaurant = new Restaurant(UUID.fromString(restaurantId), name, description, upload_urls);
     datastore.storeRestaurant(restaurant);
-    
+
     response.sendRedirect("/restaurant-page.html?restaurantId=" + restaurantId);
   }
 

@@ -37,10 +37,11 @@ public class MarkerServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     //String restaurantId = UUID.randomUUID().toString();
-    String restaurantId = request.getParameter("restaurantId");
+    String restaurantId = UUID.randomUUID().toString();
     double lat = Double.parseDouble(request.getParameter("lat"));
     double lng = Double.parseDouble(request.getParameter("lng"));
     String content = Jsoup.clean(request.getParameter("content"), Whitelist.none());
+    //Marker marker = null;
 
     Marker marker = new Marker(UUID.fromString(restaurantId), lat, lng, content);
     storeMarker(marker);
@@ -69,7 +70,7 @@ public class MarkerServlet extends HttpServlet {
   /** Stores a marker in Datastore. */
   public void storeMarker(Marker marker) {
     Entity markerEntity = new Entity("Marker");
-    markerEntity.setProperty("restaurantId", marker.getRestaurant());
+    markerEntity.setProperty("restaurantId", marker.getRestaurant().toString());
     markerEntity.setProperty("lat", marker.getLat());
     markerEntity.setProperty("lng", marker.getLng());
     markerEntity.setProperty("content", marker.getContent());
