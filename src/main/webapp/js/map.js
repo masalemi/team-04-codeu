@@ -87,8 +87,8 @@ function buildInfoWindowInput(lat, lng){
   const button = document.createElement('button');
   button.appendChild(document.createTextNode('Submit'));
   button.onclick = () => {
-    const createdRestaurantID = postMarker(null, lat, lng, textBox.value);
-    createMarkerForDisplay(createdRestaurantID, lat, lng, textBox.value);
+    postMarker(null, lat, lng, textBox.value);
+    createMarkerForDisplay(null, lat, lng, textBox.value);
     //right now markers initially display with a null id but the restaurant id does get populated but the postMarker function
     // I'm really not sure what to do to createMarkerForDisplay with the created restaurantId :(
     editMarker.setMap(null);
@@ -107,12 +107,10 @@ function postMarker(restaurantId, lat, lng, content){
   params.append('lat', lat);
   params.append('lng', lng);
   params.append('content', content);
-  request = fetch('/markers', {
+  fetch('/markers', {
     method: 'POST',
     body: params
   });
-
-  console.log(request);
 
 }
 /*
