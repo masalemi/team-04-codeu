@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
+// Get ?restaurant=XYZ parameter value
+const urlParams = new URLSearchParams(window.location.search);
+
+const parameterRestaurant = urlParams.get('restaurantId');
+
+// URL must include ?restaurantId=XYZ parameter. If not, redirect to homepage.
+if (!parameterRestaurant) {
+  window.location.replace('/');
+}
+
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
-  document.title = 'Add Restaurant Page';
+  document.title = 'Add Restaurant Page For Restaurant ' + parameterRestaurant;
 }
 
 function fetchBlobstoreUrlAndShowForm() {
-  fetch('/blobstore-upload-url-r')
+  fetch('/blobstore-upload-url-r?restaurantId=' + parameterRestaurant)
     .then((response) => {
       return response.text();
     })

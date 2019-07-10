@@ -20,7 +20,14 @@ public class BlobstoreRestaurantUploadServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    String uploadUrl = blobstoreService.createUploadUrl("/restaurant");
+    String restaurantId = request.getParameter("restaurantId");
+    String uploadUrl = null;
+    if (restaurantId != null) {
+    	uploadUrl = blobstoreService.createUploadUrl("/restaurant?restaurantId=" + restaurantId);
+    }
+    else {
+    	uploadUrl = blobstoreService.createUploadUrl("/restaurant");
+    };
 
     response.setContentType("text/html");
     response.getOutputStream().println(uploadUrl);

@@ -41,8 +41,6 @@ public class MarkerServlet extends HttpServlet {
     double lat = Double.parseDouble(request.getParameter("lat"));
     double lng = Double.parseDouble(request.getParameter("lng"));
     String content = Jsoup.clean(request.getParameter("content"), Whitelist.none());
-    //Marker marker = null;
-
     Marker marker = new Marker(UUID.fromString(restaurantId), lat, lng, content);
     storeMarker(marker);
   }

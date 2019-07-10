@@ -95,8 +95,8 @@ public class RestaurantServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // String restaurantId = request.getParameter("restaurantId");
-    String restaurantId = request.getRestaurant().toString();
+    String restaurantId = request.getParameter("restaurantId");
+    //String restaurantId = UUID.randomUUID().toString();
     String name = request.getParameter("name");
     String description = request.getParameter("description");
     // String image_string = request.getParameter("images");

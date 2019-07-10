@@ -45,13 +45,16 @@ function fetchMarkers(){
 
 /** Creates a marker that shows a read-only info window when clicked. */
 function createMarkerForDisplay(restaurantId, lat, lng, content){
+  console.log("creating marker");
   const marker = new google.maps.Marker({
     restaurantId: restaurantId,
     position: {lat: lat, lng: lng},
     map: map
   });
+
+  const link = "/restaurant-page.html?restaurantId="+restaurantId;
   var infoWindow = new google.maps.InfoWindow({
-    content: createLink("/restaurant-page.html?restaurantId="+restaurantId, content)
+    content: createLink(link, content)
   });
   marker.addListener('click', () => {
     infoWindow.open(map, marker);
@@ -84,8 +87,10 @@ function buildInfoWindowInput(lat, lng){
   const button = document.createElement('button');
   button.appendChild(document.createTextNode('Submit'));
   button.onclick = () => {
-    postMarker(null, lat, lng, textBox.value);
-    createMarkerForDisplay(null, lat, lng, textBox.value); //right now markers initially have a null id but the restaurant id gets populatedd later
+    const createdRestaurantID = postMarker(null, lat, lng, textBox.value);
+    createMarkerForDisplay(createdRestaurantID, lat, lng, textBox.value);
+    //right now markers initially display with a null id but the restaurant id does get populated but the postMarker function
+    // I'm really not sure what to do to createMarkerForDisplay with the created restaurantId :(
     editMarker.setMap(null);
   };
   const containerDiv = document.createElement('div');
@@ -102,10 +107,13 @@ function postMarker(restaurantId, lat, lng, content){
   params.append('lat', lat);
   params.append('lng', lng);
   params.append('content', content);
-  fetch('/markers', {
+  request = fetch('/markers', {
     method: 'POST',
     body: params
   });
+
+  console.log(request);
+
 }
 /*
 function createUfoSightingsMap(){
