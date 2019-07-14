@@ -47,8 +47,11 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
+    
+    if (message.getRestaurant() != null) {
+      messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
+    }
 
     datastore.put(messageEntity);
   }
