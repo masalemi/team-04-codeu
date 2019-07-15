@@ -113,9 +113,11 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
+    String restaurantId = request.getParameter("restaurantId");
+
     // Redirect to index.html if not logged in
     UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn() && request.getParameter("restaurantId") == null) {
+    if (!userService.isUserLoggedIn() && restaurantId == null) {
       response.sendRedirect("/index.html");
       return;
     }
@@ -124,6 +126,9 @@ public class MessageServlet extends HttpServlet {
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
+    System.out.println("start");
+    System.out.println(userText);
+    System.out.println("end");
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
@@ -169,7 +174,7 @@ public class MessageServlet extends HttpServlet {
     }
 
     if (labels.size() >= 3) {
-      textWithMediaReplaced += "Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2);
+      textWithMediaReplaced += "<br/>Top 3 Guesses: " + labels.get(0) + ", " + labels.get(1) + ", " + labels.get(2);
     }
 
     if (sentimentScore > -1.0 && sentimentScore < 1.0){
@@ -178,9 +183,18 @@ public class MessageServlet extends HttpServlet {
       else textWithMediaReplaced += "<br/>Attitude Guess: Neutral";
     }
 
-    text = makeMarkdown(textWithMediaReplaced);
+    regex = "@@(.+?)(?=(<|&))";
+    replacement = "<a href=\"/user-page.html?user=$1\">$1</a>";
+    textWithMediaReplaced = textWithMediaReplaced.replaceAll(regex, replacement);
+    System.out.println(textWithMediaReplaced);
 
-    String restaurantId = request.getParameter("restaurantId");
+    textWithMediaReplaced += "<br/><a href=\"/user-page.html?user=" + user + "\">User Page</a>";
+
+    if (restaurantId != null) {
+      textWithMediaReplaced += "<br/><a href=\"/restaurant-page.html?restaurantId=" + restaurantId + "\">Restaurant Page</a>";
+    }
+
+    text = makeMarkdown(textWithMediaReplaced);
 
     Message message = null;
 

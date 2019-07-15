@@ -47,8 +47,12 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
     messageEntity.setProperty("imageUrl", message.getImageUrl());
+    messageEntity.setProperty("sentimentScore", message.getSentimentScore());
+    
+    if (message.getRestaurant() != null) {
+      messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
+    }
     datastore.put(messageEntity);
   }
 
@@ -74,8 +78,8 @@ public class Datastore {
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
         String imageUrl = (String) entity.getProperty("imageUrl");
-
-        Message message = new Message(id, user, text, timestamp, imageUrl);
+        float sentimentScore = (float) entity.getProperty("sentimentScore");
+        Message message = new Message(id, user, text, sentimentScore, timestamp, imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -264,10 +268,11 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        String user = entity.getKey().getName();
         String imageUrl = (String) entity.getProperty("imageUrl");
-
-        Message message = new Message(id, user, text, timestamp, imageUrl);
+        String user = (String) entity.getProperty("user");
+        String floatingString = entity.getProperty("sentimentScore") + "";
+        float sentimentScore = Float.parseFloat(floatingString);
+        Message message = new Message(id, user, text, sentimentScore, timestamp, imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");

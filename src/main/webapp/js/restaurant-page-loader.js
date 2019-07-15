@@ -42,6 +42,14 @@ function fetchRestaurantInfo(){
       description = 'This restaurant does not have a description yet.';
     }
     descriptionContainer.innerHTML = description;
+
+    let name = restaurant_data.name;
+    const nameContainer = document.getElementById('restaurantName');
+    if(name === undefined || name == ''){
+      name = 'This restaurant does not have a name yet.';
+    }
+    nameContainer.innerHTML = name;
+
   });
 }
 
@@ -75,19 +83,36 @@ function fetchRestaurantInfo(){
       return response.json();
     }).then((messages) => {
       const messageContainer = document.getElementById('message-container');
-      console.log(messages.length);
       if(messages.length == 0){
        messageContainer.innerHTML = '<p>This restaurant has no reviews yet.</p>';
       }
       else{
        messageContainer.innerHTML = '';
       }
-      messages.forEach((message) => {
+      var messageCount = 0;
+      var sentimentSum = 0;
+      messages.forEach((message) => { 
+       messageCount++;
+       sentimentSum += message.sentimentScore;
        const messageDiv = buildReviewDiv(message);
        messageContainer.appendChild(messageDiv);
       });
+      setScore(sentimentSum, messageCount);
     });
   }
+
+  // Sets reviews to a given Number
+  function setScore(score, count) {
+    var average = score / count;
+    if (Number.isNaN(average)) {
+      document.getElementById("reviewScore").textContent = "No scores yet";
+    } else {
+    average = average * 5;
+    average = average + 5;
+    document.getElementById("reviewScore").textContent = "Average Score: " + average + "/10";
+    }
+  }
+
   // This is an alternative way to format a message, here for reference
 
   // function buildReviewDiv(message){

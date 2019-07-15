@@ -62,6 +62,10 @@ public class Message {
     this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null, imageUrl);
   }
 
+  public Message(UUID id, String user, String text, float sentimentScore, long timestamp, String imageUrl) {
+    this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, null, imageUrl);
+  }
+
   public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId, String imageUrl) {
     this.id = id;
     this.user = user;
@@ -103,5 +107,19 @@ public class Message {
 
   public String getImageUrl() {
     return imageUrl;
+  }
+
+  @Override
+  public String toString() {
+    String returnString = "";
+    returnString += "UUID: " + id + "\n";
+    returnString += "user: " + user + "\n";
+    returnString += "text: " + text + "\n";
+    returnString += "timestamp: " + timestamp + "\n";
+    returnString += "labels: " + labels.toString() + "\n";
+    returnString += "sentimentScore: " + sentimentScore + "\n";
+    returnString += "restaurantID: " + restaurantId + "\n";
+    
+    return returnString;
   }
 }
