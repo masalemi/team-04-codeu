@@ -128,7 +128,8 @@ public class MessageServlet extends HttpServlet {
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
     if (uploadedFileUrl != null) {
-      userText += " <img src=\"" + uploadedFileUrl.replace("<i>", "_").replace("</i>", "_") + "\" />";
+      uploadedFileUrl = uploadedFileUrl.replace("<i>", "_").replace("</i>", "_");
+      userText += " <img src=\"" + uploadedFileUrl + "\" />";
       byte[] blobBytes = getBlobBytes(blobKey);
       List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
       for(EntityAnnotation label : imageLabels){
@@ -184,10 +185,10 @@ public class MessageServlet extends HttpServlet {
     Message message = null;
 
     if (restaurantId == null) {
-      message = new Message(user, text, labels, sentimentScore, null);
+      message = new Message(user, text, labels, sentimentScore, null, uploadedFileUrl);
     }
     else {
-      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId));
+      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId), uploadedFileUrl);
     }
     // Store message in datastore
     datastore.storeMessage(message);
