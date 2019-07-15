@@ -9,7 +9,6 @@ function fetchRestaurantImages(){
     fetch(url).then((response) => {
       return response.json();
     }).then((messages) => {
-      const messageContainer = document.getElementById('message-container');
       let message_image = [];
       messages.forEach((message) => {
         if (message.imageUrl != null) {
