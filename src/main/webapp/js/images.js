@@ -23,7 +23,6 @@ function fetchRestaurantImages(){
       all_images.forEach((url) => {
         list_html += '<li class=\'slides-in\'><img src=\'' + url + '\' alt=\'project image\'></li>'
       });
-      // const b = <li class=\'slides-in\'><img src=\'img/1.jpg\' alt=\'project image\'></li>';
       const end = '</ul><div class=\'cd-slider-navigation\'><ul><li><a href=\'#\' class=\'prev inactive\'><i class=\'fas fa-chevron-left fa-3x\' style=\'color:white\'></i></a></li><li><a href=\'#\' class=\'next\'><i class=\'fas fa-chevron-right fa-3x\' style=\'color:white\'></i></a></li></ul></div>';
       const html = start + list_html + end;
       imageContainer.innerHTML = html;
@@ -33,15 +32,7 @@ function fetchRestaurantImages(){
 
 
 function runCode() {
-  // const imageContainer = document.getElementById('image-slider');
-  // const a = '<ul class=\"cd-slider\">';
-  // const b = '<li class=\'current\'><img src=\'img/1.jpg\' alt=\'project image\'></li><li><img src=\'img/1.jpg\' alt=\'project image\'></li>';
-  // const c = '</ul><div class=\'cd-slider-navigation\'><ul><li><a href=\'#\' class=\'prev inactive\'><i class=\'fas fa-chevron-left fa-3x\' style=\'color:white\'></i></a></li><li><a href=\'#\' class=\'next\'><i class=\'fas fa-chevron-right fa-3x\' style=\'color:white\'></i></a></li></ul></div>';
-  // const html = a + b + c;
-  // imageContainer.innerHTML = html;
-
   fetchRestaurantImages();
-  console.log("done");
 }
 
 runCode();
