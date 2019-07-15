@@ -110,7 +110,7 @@ public class RestaurantServlet extends HttpServlet {
     // }
 
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
-    upload_urls.add(uploadedFileUrl);
+    upload_urls.add(uploadedFileUrl.replace("<i>", "_").replace("</i>", "_"));
 
     Restaurant restaurant = new Restaurant(UUID.fromString(restaurantId), name, description, upload_urls);
     datastore.storeRestaurant(restaurant);

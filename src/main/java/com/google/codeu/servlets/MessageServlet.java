@@ -126,9 +126,6 @@ public class MessageServlet extends HttpServlet {
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
-    System.out.println("start");
-    System.out.println(userText);
-    System.out.println("end");
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
@@ -197,6 +194,9 @@ public class MessageServlet extends HttpServlet {
     text = makeMarkdown(textWithMediaReplaced);
 
     Message message = null;
+
+    System.out.println("test");
+    System.out.println(uploadedFileUrl);
 
     if (restaurantId == null) {
       message = new Message(user, text, labels, sentimentScore, null, uploadedFileUrl);
