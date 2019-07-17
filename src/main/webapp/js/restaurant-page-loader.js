@@ -29,6 +29,10 @@ function setPageTitle() {
   document.title = parameterRestaurant + ' - Restaurant Page';
 }
 
+function setIFrame() {
+  document.getElementById("feedFrame").setAttribute("src", "/feed.html?restaurantId=" + parameterRestaurant);
+}
+
 /** Fetches restaurant description and add to page.*/
 function fetchRestaurantInfo(){
   const url = '/restaurant?restaurantId=' + parameterRestaurant;
@@ -203,6 +207,7 @@ function buildRestaurant() {
   const config = {removePlugins: [ 'ImageUpload' ]};
   ClassicEditor.create(document.getElementById('message-input'), config);
   setPageTitle();
+  setIFrame();
   fetchRestaurantInfo();
   fetchReviews();
   fetchBlobstoreUrlAndShowForm();
