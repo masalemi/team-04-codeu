@@ -47,10 +47,15 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
+    messageEntity.setProperty("labels", message.getImageLabels());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
-    
-    if (message.getRestaurant() != null) {
+    if(message.getRestaurant()==null){
+      messageEntity.setProperty("restaurantId", null);
+      messageEntity.setProperty("reviewScore", 0);
+    }
+    else{
       messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
+      messageEntity.setProperty("reviewScore", message.getReviewScore());
     }
 
     datastore.put(messageEntity);
@@ -77,9 +82,12 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        float sentimentScore = (float) entity.getProperty("sentimentScore");
+        ArrayList<String> labels = (ArrayList<String>) entity.getProperty("labels");
+        float sentimentScore = Float.parseFloat(entity.getProperty("sentimentScore")+"f");
+        UUID restaurantId = (UUID) entity.getProperty("restaurantId");
+        int reviewScore = (int) entity.getProperty("reviewScore");
 
-        Message message = new Message(id, user, text, sentimentScore, timestamp);
+        Message message = new Message(id, user, text, timestamp, labels, sentimentScore, restaurantId, reviewScore);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -268,11 +276,13 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        String user = (String) entity.getProperty("user");
-        String floatingString = entity.getProperty("sentimentScore") + "";
-        float sentimentScore = Float.parseFloat(floatingString);
+        String user = entity.getKey().getName();
+        ArrayList<String> labels = (ArrayList<String>) entity.getProperty("labels");
+        float sentimentScore = Float.parseFloat(entity.getProperty("sentimentScore")+"f");
+        UUID restaurantId = UUID.fromString((String) entity.getProperty("restaurantId"));
+        int reviewScore = Long.valueOf((long)entity.getProperty("reviewScore")).intValue();
 
-        Message message = new Message(id, user, text, sentimentScore, timestamp);
+        Message message = new Message(id, user, text, timestamp, labels, sentimentScore, restaurantId, reviewScore);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");

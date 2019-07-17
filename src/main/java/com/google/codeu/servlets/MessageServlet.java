@@ -110,7 +110,6 @@ public class MessageServlet extends HttpServlet {
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
     response.setContentType("application/json");
 
     String restaurantId = request.getParameter("restaurantId");
@@ -121,14 +120,14 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     }
-
     // Get user, message text and image url
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
-    System.out.println("start");
-    System.out.println(userText);
-    System.out.println("end");
+    int reviewScore = 0;
+    if(request.getParameter("restaurantId") != null && !request.getParameter("reviewScore").toString().equals("")){
+      reviewScore = Integer.parseInt(request.getParameter("reviewScore"), 10);
+    }
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
@@ -197,12 +196,13 @@ public class MessageServlet extends HttpServlet {
 
     Message message = null;
 
-    if (restaurantId == null) {
-      message = new Message(user, text, labels, sentimentScore, null);
+    /*if (restaurantId == null) {
+      message = new Message(user, text, labels, sentimentScore, null, reviewScore);
     }
     else {
-      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId));
-    }
+      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId), reviewScore);
+    }*/
+    message = new Message(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, UUID.fromString(restaurantId), reviewScore);
     // Store message in datastore
     datastore.storeMessage(message);
     if (restaurantId != null) {
@@ -377,5 +377,4 @@ public class MessageServlet extends HttpServlet {
 
     return imageResponse.getLabelAnnotationsList();
   }
-
 }

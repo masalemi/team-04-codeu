@@ -24,6 +24,15 @@ if (!parameterRestaurant) {
   window.location.replace('/');
 }
 
+function checkValid() {
+    var x;
+    x = document.getElementById("reviewScoreId").value;
+    if (x == "") {
+        alert("Please rate the restaurant.");
+        return false;
+    };
+}
+
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
   document.title = parameterRestaurant + ' - Restaurant Page';
@@ -83,16 +92,14 @@ function fetchRestaurantInfo(){
       return response.json();
     }).then((messages) => {
       const messageContainer = document.getElementById('message-container');
-      //console.log(messages.length);
+      // console.log(messages.length);
       if(messages.length == 0){
        messageContainer.innerHTML = '<p>This restaurant has no reviews yet.</p>';
       }
       else{
-       messageContainer.innerHTML = '';  
+       messageContainer.innerHTML = '';
       }
-      var messageCount = 0;
-      var sentimentSum = 0;
-      messages.forEach((message) => { 
+      messages.forEach((message) => {
        messageCount++;
        sentimentSum += message.sentimentScore;
        const messageDiv = buildReviewDiv(message);
@@ -120,25 +127,25 @@ function fetchRestaurantInfo(){
   //  const usernameDiv = document.createElement('div');
   //  usernameDiv.classList.add("left-align");
   //  usernameDiv.appendChild(document.createTextNode(message.user));
-   
+
   //  const timeDiv = document.createElement('div');
   //  timeDiv.classList.add('right-align');
   //  timeDiv.appendChild(document.createTextNode(new Date(message.timestamp)));
-   
+
   //  const headerDiv = document.createElement('div');
   //  headerDiv.classList.add('message-header');
   //  headerDiv.appendChild(usernameDiv);
   //  headerDiv.appendChild(timeDiv);
-   
+
   //  const bodyDiv = document.createElement('div');
   //  bodyDiv.classList.add('message-body');
   //  bodyDiv.appendChild(document.createTextNode(message.text));
-   
+
   //  const messageDiv = document.createElement('div');
   //  messageDiv.classList.add("message-div");
   //  messageDiv.appendChild(headerDiv);
   //  messageDiv.appendChild(bodyDiv);
-   
+
   //  return messageDiv;
   // }
 
@@ -157,9 +164,14 @@ function buildReviewDiv(message) {
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
 
+  const reviewScoreDiv = document.createElement('div');
+  reviewScoreDiv.classList.add('message-reviewScore');
+  reviewScoreDiv.innerHTML = "Review Score: " + message.reviewScore;
+
   const messageDiv = document.createElement('div');
   messageDiv.classList.add('message-div');
   messageDiv.appendChild(headerDiv);
+  messageDiv.appendChild(reviewScoreDiv);
   messageDiv.appendChild(bodyDiv);
 
   return messageDiv;
