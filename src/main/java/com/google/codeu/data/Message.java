@@ -27,7 +27,7 @@ public class Message {
   private UUID id;
   private String user;
   private String text;
-  private String imageLabel;
+  //private String imageLabel;
   private long timestamp;
   private ArrayList<String> labels;
   private float sentimentScore;
@@ -96,5 +96,19 @@ public class Message {
 
   public int getReviewScore() {
     return reviewScore;
+  }
+
+  @Override
+  public String toString() {
+    String returnString = "";
+    returnString += "UUID: " + id + "\n";
+    returnString += "user: " + user + "\n";
+    returnString += "text: " + text + "\n";
+    returnString += "timestamp: " + timestamp + "\n";
+    returnString += "labels: " + labels.toString() + "\n";
+    returnString += "sentimentScore: " + sentimentScore + "\n";
+    returnString += "restaurantID: " + restaurantId + "\n";
+
+    return returnString;
   }
 }

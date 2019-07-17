@@ -54,7 +54,8 @@
 
       <div class="sidebarContentWrapper">
         <div class="sidebar">
-          <h3>hahaha</h3>
+          <h2 id = "restaurantName">Loading...</h2>
+          <h3 id ="reviewScore">hahaha</h3>
           <div id="description-container">Loading...</div>
         </div>
 
@@ -110,5 +111,23 @@
 
       <script src="js/jquery.mobile.custom.min.js"></script>
       <script src="js/restaurant-image-slide.js"></script>
+
+
+
+      <div class="message-form-container">
+      <form id="review-form" class="hidden" method="POST" enctype="multipart/form-data">
+          Enter a new message:
+          <br/>
+          <textarea name="text" id="message-input"></textarea>
+          <br/>
+          Upload an image:
+          <br/>
+          <input type="file" name="image">
+          <br/>
+          <button>Submit</button>
+        </form>
+
+        <div id="message-container">Loading...</div>
+      </div>
     </body>
 </html>
