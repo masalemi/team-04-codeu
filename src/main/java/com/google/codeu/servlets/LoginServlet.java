@@ -24,12 +24,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.User;
 
 /**
  * Redirects the user to the Google login page or their page if they're already logged in.
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+
+  private Datastore datastore;
+
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
+
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -40,9 +50,10 @@ public class LoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       String user = userService.getCurrentUser().getEmail();
       response.sendRedirect("/user-page.html?user=" + user);
+      User userObj = new User(user, "");
+      datastore.storeUser(userObj);
       return;
     }
-
     // Redirect to Google login page. That page will then redirect back to /login,
     // which will be handled by the above if statement.
     String googleLoginUrl = userService.createLoginURL("/login");

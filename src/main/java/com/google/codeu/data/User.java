@@ -17,4 +17,9 @@ public class User {
   public String getAboutMe() {
     return aboutMe;
   }
+
+  public boolean setAboutMe(String aboutMe) {
+    this.aboutMe = aboutMe;
+    return true;
+  }
 }

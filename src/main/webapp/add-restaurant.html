@@ -19,6 +19,7 @@ limitations under the License.
   <head>
     <title>User Page</title>
     <meta charset="UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/add-restaurant-loader.js"></script>
@@ -31,7 +32,7 @@ limitations under the License.
     </style>
   </head>
   <body onload="addRestaurantUI();">
-    <nav>
+    <nav class="nav">
       <ul id="navigation">
         <li><a href="/">Home</a></li>
         <li><a href="/aboutus.html">About Our Team</a></li>
@@ -40,10 +41,8 @@ limitations under the License.
     </nav>
     <h1 id="page-title">Add Restaurant Page</h1>
 
-    </div>
-
     <div class="message-form-container">
-    <form id="restaurant-form" class="hidden" method="POST" enctype="multipart/form-data">
+      <form id="restaurant-form" class="hidden" method="POST" enctype="multipart/form-data">
         Enter a name:
         <br/>
         <textarea name="name" id="restaurant-name"></textarea>

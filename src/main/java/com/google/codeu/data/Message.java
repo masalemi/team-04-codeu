@@ -31,6 +31,7 @@ public class Message {
   private long timestamp;
   private ArrayList<String> labels;
   private float sentimentScore;
+  private int reviewScore;
   private UUID restaurantId;
 
   /**
@@ -39,26 +40,22 @@ public class Message {
    */
 
   public Message(String user, String text) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0, null);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0, null, 0);
   }
 
   public Message(String user, String text, ArrayList<String> labels, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, null);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, null, 0);
   }
 
-  public Message(String user, String text, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, restaurantId);
+  public Message(String user, String text, ArrayList<String> labels, float sentimentScore, UUID restaurantId, int reviewScore) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, restaurantId, reviewScore);
   }
 
   public Message(UUID id, String user, String text, long timestamp) {
-    this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null);
+    this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null, 0);
   }
 
-  public Message(UUID id, String user, String text, float sentimentScore, long timestamp) {
-    this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, null);
-  }
-
-  public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
+  public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId, int reviewScore) {
     this.id = id;
     this.user = user;
     this.text = text;
@@ -66,6 +63,7 @@ public class Message {
     this.labels = labels;
     this.sentimentScore = sentimentScore;
     this.restaurantId = restaurantId;
+    this.reviewScore = reviewScore;
   }
 
   public UUID getId() {
@@ -96,6 +94,10 @@ public class Message {
     return restaurantId;
   }
 
+  public int getReviewScore() {
+    return reviewScore;
+  }
+
   @Override
   public String toString() {
     String returnString = "";
@@ -106,7 +108,7 @@ public class Message {
     returnString += "labels: " + labels.toString() + "\n";
     returnString += "sentimentScore: " + sentimentScore + "\n";
     returnString += "restaurantID: " + restaurantId + "\n";
-    
+
     return returnString;
   }
 }
