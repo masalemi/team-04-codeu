@@ -20,9 +20,13 @@ limitations under the License.
     <title>User Page</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/map.css">
     <link rel="stylesheet" href="/css/user-page.css">
+    <link rel="shortcut icon" href="#">
     <script src="/js/add-restaurant-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCE3UVG8ziLuOBJXWJIqX-Y9BUzbquqgXU"></script>
+    <script src="/js/map.js"></script>
     <style>
       /* Form is hidden by default. */
       .hidden {
@@ -30,7 +34,7 @@ limitations under the License.
       }
     </style>
   </head>
-  <body onload="addRestaurantUI();">
+  <body onload="addRestaurantUI(); createMap();">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
@@ -39,11 +43,11 @@ limitations under the License.
       </ul>
     </nav>
     <h1 id="page-title">Add Restaurant Page</h1>
-
-    </div>
-
     <div class="message-form-container">
     <form id="restaurant-form" class="hidden" method="POST" enctype="multipart/form-data">
+        <div class="map-container">
+        <div id="map"></div>
+        </div>
         Enter a name:
         <br/>
         <textarea name="name" id="restaurant-name"></textarea>

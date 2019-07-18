@@ -126,14 +126,12 @@ public class MessageServlet extends HttpServlet {
     ArrayList<String> labels = new ArrayList<String>();
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.basicWithImages());
-    System.out.println("start");
-    System.out.println(userText);
-    System.out.println("end");
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     BlobKey blobKey = getBlobKey(request, "image");
     // Get image labels
     if (uploadedFileUrl != null) {
-      userText += " <img src=\"" + uploadedFileUrl.replace("<i>", "_").replace("</i>", "_") + "\" />";
+      uploadedFileUrl = uploadedFileUrl.replace("<i>", "_").replace("</i>", "_");
+      userText += " <img src=\"" + uploadedFileUrl + "\" />";
       byte[] blobBytes = getBlobBytes(blobKey);
       List<EntityAnnotation> imageLabels = getImageLabels(blobBytes);
       for(EntityAnnotation label : imageLabels){
@@ -197,11 +195,14 @@ public class MessageServlet extends HttpServlet {
 
     Message message = null;
 
+    System.out.println("test");
+    System.out.println(uploadedFileUrl);
+
     if (restaurantId == null) {
-      message = new Message(user, text, labels, sentimentScore, null);
+      message = new Message(user, text, labels, sentimentScore, null, uploadedFileUrl);
     }
     else {
-      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId));
+      message = new Message(user, text, labels, sentimentScore, UUID.fromString(restaurantId), uploadedFileUrl);
     }
     // Store message in datastore
     datastore.storeMessage(message);

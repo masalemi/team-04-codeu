@@ -27,7 +27,7 @@ public class Message {
   private UUID id;
   private String user;
   private String text;
-  //private String imageLabel;
+  private String imageUrl;
   private long timestamp;
   private ArrayList<String> labels;
   private float sentimentScore;
@@ -39,26 +39,34 @@ public class Message {
    */
 
   public Message(String user, String text) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0, null);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), new ArrayList<String>(), (float) 2.0, null, null);
   }
 
   public Message(String user, String text, ArrayList<String> labels, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, null);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, null, null);
   }
 
   public Message(String user, String text, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, restaurantId);
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, restaurantId, null);
+  }
+
+  public Message(String user, String text, ArrayList<String> labels, float sentimentScore, UUID restaurantId, String imageUrl) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), labels, sentimentScore, restaurantId, imageUrl);
   }
 
   public Message(UUID id, String user, String text, long timestamp) {
-    this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null);
+    this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null, null);
   }
 
-  public Message(UUID id, String user, String text, float sentimentScore, long timestamp) {
-    this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, null);
+  public Message(UUID id, String user, String text, long timestamp, String imageUrl) {
+    this(id, user, text, timestamp, new ArrayList<String>(), (float) 2.0, null, imageUrl);
   }
 
-  public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId) {
+  public Message(UUID id, String user, String text, float sentimentScore, long timestamp, String imageUrl) {
+    this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, null, imageUrl);
+  }
+
+  public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId, String imageUrl) {
     this.id = id;
     this.user = user;
     this.text = text;
@@ -66,6 +74,7 @@ public class Message {
     this.labels = labels;
     this.sentimentScore = sentimentScore;
     this.restaurantId = restaurantId;
+    this.imageUrl = imageUrl;
   }
 
   public UUID getId() {
@@ -94,6 +103,10 @@ public class Message {
 
   public UUID getRestaurant() {
     return restaurantId;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
   }
 
   @Override

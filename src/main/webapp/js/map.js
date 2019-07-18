@@ -28,7 +28,6 @@ function createMap(){
   map.addListener('click', (event) => {
     createMarkerForEdit(event.latLng.lat(), event.latLng.lng());
   });
-  createUfoSightingsMap();
   fetchMarkers();
 }
 
@@ -38,19 +37,24 @@ function fetchMarkers(){
     return response.json();
   }).then((markers) => {
     markers.forEach((marker) => {
-     createMarkerForDisplay(marker.lat, marker.lng, marker.content)
+     createMarkerForDisplay(marker.restaurantId, marker.lat, marker.lng, marker.content)
     });
+
   });
 }
 
 /** Creates a marker that shows a read-only info window when clicked. */
-function createMarkerForDisplay(lat, lng, content){
+function createMarkerForDisplay(restaurantId, lat, lng, content){
+  console.log("creating marker");
   const marker = new google.maps.Marker({
+    restaurantId: restaurantId,
     position: {lat: lat, lng: lng},
     map: map
   });
+
+  const link = "/restaurant-page.html?restaurantId="+restaurantId;
   var infoWindow = new google.maps.InfoWindow({
-    content: content
+    content: createLink(link, content)
   });
   marker.addListener('click', () => {
     infoWindow.open(map, marker);
@@ -83,8 +87,10 @@ function buildInfoWindowInput(lat, lng){
   const button = document.createElement('button');
   button.appendChild(document.createTextNode('Submit'));
   button.onclick = () => {
-    postMarker(lat, lng, textBox.value);
-    createMarkerForDisplay(lat, lng, textBox.value);
+    postMarker(null, lat, lng, textBox.value);
+    createMarkerForDisplay(null, lat, lng, textBox.value);
+    //right now markers initially display with a null id but the restaurant id does get populated but the postMarker function
+    // I'm really not sure what to do to createMarkerForDisplay with the created restaurantId :(
     editMarker.setMap(null);
   };
   const containerDiv = document.createElement('div');
@@ -95,8 +101,9 @@ function buildInfoWindowInput(lat, lng){
 }
 
 /** Sends a marker to the backend for saving. */
-function postMarker(lat, lng, content){
+function postMarker(restaurantId, lat, lng, content){
   const params = new URLSearchParams();
+  params.append('restaurantId', restaurantId)
   params.append('lat', lat);
   params.append('lng', lng);
   params.append('content', content);
@@ -104,8 +111,9 @@ function postMarker(lat, lng, content){
     method: 'POST',
     body: params
   });
-}
 
+}
+/*
 function createUfoSightingsMap(){
   fetch('/ufo-data').then(function(response) {
     return response.json();
@@ -114,7 +122,7 @@ function createUfoSightingsMap(){
       createMarkerForDisplay(ufoSighting.lat, ufoSighting.lng, ufoSighting.content);
     });
   });
-}
+}*/
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
@@ -122,4 +130,11 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
   infoWindow.open(map);
+}
+
+function createLink(url, text) {
+  const linkElement = document.createElement('a');
+  linkElement.appendChild(document.createTextNode(text));
+  linkElement.href = url;
+  return linkElement;
 }

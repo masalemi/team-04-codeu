@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import java.util.UUID;
 
 @WebServlet("/markers")
 public class MarkerServlet extends HttpServlet {
@@ -35,11 +36,11 @@ public class MarkerServlet extends HttpServlet {
   /** Accepts a POST request containing a new marker. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    String restaurantId = UUID.randomUUID().toString();
     double lat = Double.parseDouble(request.getParameter("lat"));
     double lng = Double.parseDouble(request.getParameter("lng"));
     String content = Jsoup.clean(request.getParameter("content"), Whitelist.none());
-
-    Marker marker = new Marker(lat, lng, content);
+    Marker marker = new Marker(UUID.fromString(restaurantId), lat, lng, content);
     storeMarker(marker);
   }
 
@@ -52,11 +53,12 @@ public class MarkerServlet extends HttpServlet {
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
+      String restaurantId = (String) entity.getProperty("restaurantId");
       double lat = (double) entity.getProperty("lat");
       double lng = (double) entity.getProperty("lng");
       String content = (String) entity.getProperty("content");
 
-      Marker marker = new Marker(lat, lng, content);
+      Marker marker = new Marker(UUID.fromString(restaurantId), lat, lng, content);
       markers.add(marker);
     }
     return markers;
@@ -65,6 +67,7 @@ public class MarkerServlet extends HttpServlet {
   /** Stores a marker in Datastore. */
   public void storeMarker(Marker marker) {
     Entity markerEntity = new Entity("Marker");
+    markerEntity.setProperty("restaurantId", marker.getRestaurant().toString());
     markerEntity.setProperty("lat", marker.getLat());
     markerEntity.setProperty("lng", marker.getLng());
     markerEntity.setProperty("content", marker.getContent());

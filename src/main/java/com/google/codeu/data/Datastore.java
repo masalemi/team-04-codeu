@@ -47,12 +47,12 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
+    messageEntity.setProperty("imageUrl", message.getImageUrl());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     
     if (message.getRestaurant() != null) {
       messageEntity.setProperty("restaurantId", message.getRestaurant().toString());
     }
-
     datastore.put(messageEntity);
   }
 
@@ -77,9 +77,9 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
+        String imageUrl = (String) entity.getProperty("imageUrl");
         float sentimentScore = (float) entity.getProperty("sentimentScore");
-
-        Message message = new Message(id, user, text, sentimentScore, timestamp);
+        Message message = new Message(id, user, text, sentimentScore, timestamp, imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -268,11 +268,11 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
+        String imageUrl = (String) entity.getProperty("imageUrl");
         String user = (String) entity.getProperty("user");
         String floatingString = entity.getProperty("sentimentScore") + "";
         float sentimentScore = Float.parseFloat(floatingString);
-
-        Message message = new Message(id, user, text, sentimentScore, timestamp);
+        Message message = new Message(id, user, text, sentimentScore, timestamp, imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
