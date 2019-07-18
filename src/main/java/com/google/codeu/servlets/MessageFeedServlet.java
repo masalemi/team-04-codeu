@@ -2,6 +2,8 @@ package com.google.codeu.servlets;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
+
+import java.util.UUID;
 
 /**
  * Handles fetching all messages for the public feed.
@@ -34,7 +38,18 @@ public class MessageFeedServlet extends HttpServlet{
 
   response.setContentType("application/json");
   
-  List<Message> messages = datastore.getAllMessages();
+  List<Message> messages = new ArrayList<>();
+  
+  String restaurantId = request.getParameter("restaurantId");
+  
+  if (restaurantId == null || restaurantId.equals("null")) {
+    messages = datastore.getAllMessages();
+  } else {
+    messages = datastore.getMessagesForRestaurant(UUID.fromString(restaurantId));
+  }
+
+  
+  
   Gson gson = new Gson();
   String json = gson.toJson(messages);
   

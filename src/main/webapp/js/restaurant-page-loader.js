@@ -29,26 +29,35 @@ function setPageTitle() {
   document.title = parameterRestaurant + ' - Restaurant Page';
 }
 
+function setIFrame() {
+  document.getElementById("feedFrame").setAttribute("src", "/feed.html?restaurantId=" + parameterRestaurant);
+}
+
 /** Fetches restaurant description and add to page.*/
 function fetchRestaurantInfo(){
   const url = '/restaurant?restaurantId=' + parameterRestaurant;
   fetch(url).then((response) => {
     return response.text();
   }).then((restaurant) => {
-  	let restaurant_data = JSON.parse(restaurant);
-  	let description = restaurant_data.description;
-    const descriptionContainer = document.getElementById('description-container');
-    if(description === undefined || description == ''){
-      description = 'This restaurant does not have a description yet.';
+    try{
+      let restaurant_data = JSON.parse(restaurant);
+      let description = restaurant_data.description;
+      const descriptionContainer = document.getElementById('description-container');
+      if(description === undefined || description == ''){
+        description = 'This restaurant does not have a description yet.';
+      }
+      descriptionContainer.innerHTML = description;
+  
+      let name = restaurant_data.name;
+      const nameContainer = document.getElementById('restaurantName');
+      if(name === undefined || name == ''){
+        name = 'This restaurant does not have a name yet.';
+      }
+      nameContainer.innerHTML = name;
+    } catch (e) {
+      window.location = "/restaurantNotFound.html";
     }
-    descriptionContainer.innerHTML = description;
-
-    let name = restaurant_data.name;
-    const nameContainer = document.getElementById('restaurantName');
-    if(name === undefined || name == ''){
-      name = 'This restaurant does not have a name yet.';
-    }
-    nameContainer.innerHTML = name;
+  	
 
   });
 }
@@ -177,12 +186,30 @@ function fetchBlobstoreUrlAndShowForm() {
     });
 }
 
+function fetchLoggedInStatus() {
+  fetch('/login-status')
+      .then((response) => {
+        return response.json();
+      })
+      .then((loginStatus) => {
+
+        if (!loginStatus.isLoggedIn) {
+          document.getElementById("messageSubmitButton").style.visibility = "hidden";
+        } else {
+          var loggedInNotice = document.getElementById('loggedInNotice');
+          loggedInNotice.parentNode.removeChild(loggedInNotice);   
+        }
+      });
+}
+
 /** Fetches data and populates the UI of the page. */
 function buildRestaurant() {
   const config = {removePlugins: [ 'ImageUpload' ]};
   ClassicEditor.create(document.getElementById('message-input'), config);
   setPageTitle();
+  setIFrame();
   fetchRestaurantInfo();
   fetchReviews();
   fetchBlobstoreUrlAndShowForm();
+  fetchLoggedInStatus();
 }

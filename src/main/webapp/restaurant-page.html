@@ -59,7 +59,9 @@
         </div>
 
         <div class="sidebarContent">
-          <iframe src="/feed.html"
+          <iframe 
+            id="feedFrame"  
+            src="/feed.html"
             frameborder="0"
             height="512"
             width="100%">
@@ -83,9 +85,9 @@
           <br/>
           <input type="file" name="image">
           <br/>
-          <button>Submit</button>
+          <button id="messageSubmitButton">Submit</button>
         </form>
-
+        <h3 id="loggedInNotice">You must be logged in to post a review!</h3>
         <div id="message-container">Loading...</div>
       </div>
     </body>
