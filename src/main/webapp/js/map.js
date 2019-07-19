@@ -83,19 +83,19 @@ function createMarkerForEdit(lat, lng){
 
 /** Builds and returns HTML elements that show an editable textbox and a submit button. */
 function buildInfoWindowInput(lat, lng){
-  const textBox = document.createElement('textarea');
+  //const textBox = document.createElement('textarea');
   const button = document.createElement('button');
-  button.appendChild(document.createTextNode('Submit'));
+  button.appendChild(document.createTextNode('Create Restaurant Here'));
   button.onclick = () => {
-    postMarker(null, lat, lng, textBox.value);
-    createMarkerForDisplay(null, lat, lng, textBox.value);
+    postMarker(null, lat, lng, null);
+    createMarkerForDisplay(null, lat, lng, null);
     //right now markers initially display with a null id but the restaurant id does get populated but the postMarker function
     // I'm really not sure what to do to createMarkerForDisplay with the created restaurantId :(
     editMarker.setMap(null);
   };
   const containerDiv = document.createElement('div');
-  containerDiv.appendChild(textBox);
-  containerDiv.appendChild(document.createElement('br'));
+  //containerDiv.appendChild(textBox);
+  //containerDiv.appendChild(document.createElement('br'));
   containerDiv.appendChild(button);
   return containerDiv;
 }
@@ -107,11 +107,13 @@ function postMarker(restaurantId, lat, lng, content){
   params.append('lat', lat);
   params.append('lng', lng);
   params.append('content', content);
+/*
   fetch('/markers', {
     method: 'POST',
     body: params
-  });
+  });*/
 
+  window.location.replace('/add-restaurant.html?lat=' + lat+"&lng="+lng);
 }
 /*
 function createUfoSightingsMap(){

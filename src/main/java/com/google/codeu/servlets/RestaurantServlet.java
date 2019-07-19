@@ -3,6 +3,7 @@ package com.google.codeu.servlets;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Marker;
 import com.google.codeu.data.Message;
 import com.google.codeu.data.Restaurant;
 import com.google.gson.Gson;
@@ -22,6 +23,10 @@ import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+
 import java.util.Map;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
@@ -96,6 +101,9 @@ public class RestaurantServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     String restaurantId = request.getParameter("restaurantId");
+    if (restaurantId == null || restaurantId.equals("null") || restaurantId.equals("")){
+      restaurantId = UUID.randomUUID().toString();
+    }
     //String restaurantId = UUID.randomUUID().toString();
     String name = request.getParameter("name");
     String description = request.getParameter("description");
@@ -110,11 +118,25 @@ public class RestaurantServlet extends HttpServlet {
     // }
 
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
-    upload_urls.add(uploadedFileUrl.replace("<i>", "_").replace("</i>", "_"));
+    if (uploadedFileUrl != null){
+      upload_urls.add(uploadedFileUrl.replace("<i>", "_").replace("</i>", "_"));
+    }
 
     Restaurant restaurant = new Restaurant(UUID.fromString(restaurantId), name, description, upload_urls);
     datastore.storeRestaurant(restaurant);
 
+    String cleanName = Jsoup.clean(name, Whitelist.none());
+    String cleanDescription = Jsoup.clean(description, Whitelist.none());
+
+    Entity markerEntity = new Entity("Marker");
+    markerEntity.setProperty("restaurantId", restaurantId);
+    markerEntity.setProperty("lat", Double.parseDouble(request.getParameter("lat")));
+    markerEntity.setProperty("lng", Double.parseDouble(request.getParameter("lng")));
+    markerEntity.setProperty("content", cleanName + ": " + cleanDescription);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(markerEntity);
+    
     response.sendRedirect("/restaurant-page.html?restaurantId=" + restaurantId);
   }
 
