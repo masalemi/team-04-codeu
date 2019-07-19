@@ -122,7 +122,11 @@ public class RestaurantServlet extends HttpServlet {
       upload_urls.add(uploadedFileUrl.replace("<i>", "_").replace("</i>", "_"));
     }
     
-    Double restaurantId
+    if(request.getParameter("lat") != null && request.getParameter("lng") != null) {
+      double lat = Double.parseDouble(request.getParameter("lat"));
+      double lng = Double.parseDouble(request.getParameter("lng"));
+      storeRestaurantMarker(restaurantId, lat, lng, name);
+    }
 
     Restaurant restaurant = new Restaurant(UUID.fromString(restaurantId), name, description, upload_urls);
     datastore.storeRestaurant(restaurant);
