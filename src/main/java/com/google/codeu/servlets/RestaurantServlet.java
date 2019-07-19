@@ -104,18 +104,10 @@ public class RestaurantServlet extends HttpServlet {
     if (restaurantId == null || restaurantId.equals("null") || restaurantId.equals("")){
       restaurantId = UUID.randomUUID().toString();
     }
-    //String restaurantId = UUID.randomUUID().toString();
     String name = request.getParameter("name");
     String description = request.getParameter("description");
-    // String image_string = request.getParameter("images");
-    // String[] items = image_string.split(",");
-    // List<String> images = Arrays.asList(items);
-    ArrayList<String> upload_urls = new ArrayList<String>();
 
-    // for (String image : images) {
-    //   String uploadedFileUrl = getUploadedFileUrl(request, "image");
-    //   upload_urls.add(uploadedFileUrl);
-    // }
+    ArrayList<String> upload_urls = new ArrayList<String>();
 
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     if (uploadedFileUrl != null){
@@ -136,7 +128,7 @@ public class RestaurantServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(markerEntity);
-    
+
     response.sendRedirect("/restaurant-page.html?restaurantId=" + restaurantId);
   }
 
