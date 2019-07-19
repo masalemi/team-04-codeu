@@ -87,10 +87,8 @@ function buildInfoWindowInput(lat, lng){
   const button = document.createElement('button');
   button.appendChild(document.createTextNode('Create Restaurant Here'));
   button.onclick = () => {
-    postMarker(null, lat, lng, null);
-    createMarkerForDisplay(null, lat, lng, null);
-    //right now markers initially display with a null id but the restaurant id does get populated but the postMarker function
-    // I'm really not sure what to do to createMarkerForDisplay with the created restaurantId :(
+    postMarker(lat, lng);
+    createMarkerForDisplay(lat, lng);
     editMarker.setMap(null);
   };
   const containerDiv = document.createElement('div');
@@ -101,30 +99,13 @@ function buildInfoWindowInput(lat, lng){
 }
 
 /** Sends a marker to the backend for saving. */
-function postMarker(restaurantId, lat, lng, content){
+function postMarker(lat, lng){
   const params = new URLSearchParams();
-  params.append('restaurantId', restaurantId)
   params.append('lat', lat);
   params.append('lng', lng);
-  params.append('content', content);
-/*
-  fetch('/markers', {
-    method: 'POST',
-    body: params
-  });*/
 
   window.location.replace('/add-restaurant.html?lat=' + lat+"&lng="+lng);
 }
-/*
-function createUfoSightingsMap(){
-  fetch('/ufo-data').then(function(response) {
-    return response.json();
-  }).then((ufoSightings) => {
-    ufoSightings.forEach((ufoSighting) => {
-      createMarkerForDisplay(ufoSighting.lat, ufoSighting.lng, ufoSighting.content);
-    });
-  });
-}*/
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);

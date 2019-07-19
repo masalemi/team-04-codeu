@@ -17,17 +17,25 @@ limitations under the License.
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    <title>CodeU 2019 Starter Project</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/map.css">
-    <link rel="shortcut icon" href="#">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <meta charset="UTF-8" />
+    <title>CodeU 2019 Team 4 Project</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/map.css" />
+    <link rel="shortcut icon" href="#" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
     <script src="/js/navigation-loader.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCE3UVG8ziLuOBJXWJIqX-Y9BUzbquqgXU"></script>
     <script src="/js/map.js"></script>
-    <link rel="icon" type="image/png" href="zacW.png" sizes="196x196" >
+    <link rel="icon" type="image/png" href="zacW.png" sizes="196x196" />
   </head>
+  <header>
+    <div class="title">
+      <h1>Live & Eat Healthy With Us</h1>
+    </div>
+  </header>
   <body onload="addLoginOrLogoutLinkToNavigation(); createMap();">
     <nav class="nav">
       <ul id="navigation">
@@ -36,35 +44,37 @@ limitations under the License.
         <li><a href="/stats.html">Statistics</a></li>
       </ul>
     </nav>
-    <h1>CodeU Starter Project</h1>
-    <p>This is the CodeU starter project. Click the links above to login and visit your page.
-    You can post messages on your page, and you can visit other user pages if you have
-    their URL.</p>
-    <p>This is your code now! Feel free to make changes, and don't be afraid to get creative!
-    You could start by modifying this page to tell the world more about your team.</p>
-
-    <h1>Hello Google Maps</h1>
+    <div class="description">
+    <p>
+      Have you ever craved something delicious but still healthy? Ever wanted to
+      indulge in some wonderful french fries or hamburgers or deep-fried onion
+      rings, but had to stop yourself? Here, we believe that you don't have to
+      stick to tasteless salads or bland sandwiches in order to live a happy,
+      healthy life. We've gathered the best restaurants in the United States
+      with healthy but still incredibly tasty options here on this website so
+      you don't have to. Whether it's poke bowls bursting with flavor or acai
+      bowls filled with antioxidants, we've got you covered.
+    </p>
+    <p>
+      Healthy food, without sacrificing flavor. This project brought to you by
+      Team 4 of Google CodeU!
+    </p>
+    </div>
+    <h1>Come find out where you should eat next!</h1>
     <div class="map-container">
       <div id="map"></div>
     </div>
-    <p>This page shows a Google Map!</p>
+    <p>Map of Healthy Restaurants in the US</p>
 
     <div>
-      <div class = "two-column">
-        <iframe src="/feed.html"
-          frameborder="0"
-          scrolling="yes"
-          height="512">
+      <div class="two-column">
+        <iframe src="/feed.html" frameborder="0" scrolling="yes" height="512">
         </iframe>
       </div>
-      <div class = "two-column">
-        <iframe src="/feed.html"
-          frameborder="0"
-          scrolling="yes"
-          height="512">
+      <div class="two-column">
+        <iframe src="/feed.html" frameborder="0" scrolling="yes" height="512">
         </iframe>
       </div>
     </div>
-
-</body>
+  </body>
 </html>
