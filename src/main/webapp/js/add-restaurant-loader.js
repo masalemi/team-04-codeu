@@ -18,10 +18,12 @@
 const urlParams = new URLSearchParams(window.location.search);
 
 const parameterRestaurant = urlParams.get('restaurantId');
+const parameterLat = urlParams.get('lat');
+const parameterLng = urlParams.get('lng');
 
 // URL must include ?restaurantId=XYZ parameter. If not, redirect to homepage.
 if (!parameterRestaurant) {
-  window.location.replace('/');
+  //window.location.replace('/');
 }
 
 /** Sets the page title based on the URL parameter username. */
@@ -46,6 +48,14 @@ function addRestaurantUI() {
   const config = {removePlugins: [ 'ImageUpload' ]};
   ClassicEditor.create(document.getElementById('restaurant-name'), config );
   ClassicEditor.create(document.getElementById('restaurant-description'), config );
+
+  if (parameterLat){
+    document.getElementById("latId").setAttribute("value", parameterLat)
+  }
+  
+  if (parameterLng){
+    document.getElementById("lngId").setAttribute("value", parameterLng)
+  }
   setPageTitle();
   fetchBlobstoreUrlAndShowForm();
 }
