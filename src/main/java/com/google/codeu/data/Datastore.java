@@ -29,8 +29,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.UUID;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.LinkedList;
+import java.util.Arrays;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -272,8 +274,15 @@ public class Datastore {
         String user = (String) entity.getProperty("user");
         String floatingString = entity.getProperty("sentimentScore") + "";
         float sentimentScore = Float.parseFloat(floatingString);
-        Message message = new Message(id, user, text, sentimentScore, timestamp, imageUrl);
-        messages.add(message);
+        String restaurantId = (String) entity.getProperty("restaurantId");
+        if (restaurantId != null) {
+        	Message message = new Message(id, user, text, sentimentScore, timestamp, UUID.fromString(restaurantId), imageUrl);
+        	messages.add(message);
+        }
+        else {
+        	Message message = new Message(id, user, text, sentimentScore, timestamp, imageUrl);
+        	messages.add(message);
+        }
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -319,4 +328,48 @@ public class Datastore {
             .addSort("timestamp", SortDirection.DESCENDING);
     return getMessagesFromQuery(query);
   }
+
+  public ArrayList<ArrayList<String>> getBestRestaurants(int num) {
+  	Query query = new Query("Message");
+  	List<Message> messages = getMessagesFromQuery(query);
+  	HashMap<String, Float> restaurantRatings = new HashMap<String, Float>();
+  	for (int i = 0; i < messages.size(); i++) {
+  		Message message = messages.get(i);
+  		String id = message.getId().toString();
+  		if (id == null) {
+  			continue;
+  		}
+  		else {
+  			float rating = restaurantRatings.containsKey(id) ? restaurantRatings.get(id) : 0;
+  			float sum = 0;
+			restaurantRatings.put(id, rating + message.getSentimentScore());
+  		}
+  	}
+
+  	List<Entry<String, Float>> list = new LinkedList<>(restaurantRatings.entrySet());
+  	boolean order = false;
+    list.sort((o1, o2) -> order ? o1.getValue().compareTo(o2.getValue()) == 0
+            ? o1.getKey().compareTo(o2.getKey())
+            : o1.getValue().compareTo(o2.getValue()) : o2.getValue().compareTo(o1.getValue()) == 0
+            ? o2.getKey().compareTo(o1.getKey())
+            : o2.getValue().compareTo(o1.getValue()));
+
+    ArrayList<ArrayList<String>> topRestaurants = new ArrayList<ArrayList<String>> (); 
+
+    for (int i = 0; i < num; i++) {
+    	if (i >= list.size()) {
+    		break;
+    	}
+    	ArrayList<String> id_and_score = new ArrayList<String>();
+    	id_and_score.add(list.get(i).getKey());
+    	id_and_score.add(Float.toString(list.get(i).getValue()));
+    	topRestaurants.add(new ArrayList<String>(id_and_score));
+    }
+
+    System.out.println(topRestaurants);
+
+  	return topRestaurants;
+  }
 }
+
+

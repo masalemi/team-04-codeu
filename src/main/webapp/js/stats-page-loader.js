@@ -17,6 +17,7 @@ function fetchStats(){
     statsContainer.appendChild(longestMessage);
     statsContainer.appendChild(userCountElement);
     statsContainer.appendChild(mostActiveUser);
+    console.log(stats.bestRestaurants);
   });
 }
 
