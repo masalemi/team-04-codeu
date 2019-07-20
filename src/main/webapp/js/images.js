@@ -22,7 +22,8 @@ function fetchRestaurantImages(){
       for (var i = 0; i < all_images.length; i++) {
         let url = all_images[i];
         if (i == 0) {
-          list_html += '<li class=\"current\"><img src=\'' + url + '\' alt=\'project image\'></li>'
+          // list_html += '<li class=\"current\"><img src=\'' + url + '\' alt=\'project image\'></li>'
+          list_html += '<li class=\'slides-in\'><img src=\'' + url + '\' alt=\'project image\'></li>'
         }
         else {
           list_html += '<li><img src=\'' + url + '\' alt=\'project image\'></li>'
