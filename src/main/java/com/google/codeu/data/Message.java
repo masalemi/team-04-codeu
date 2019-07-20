@@ -66,6 +66,10 @@ public class Message {
     this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, null, imageUrl);
   }
 
+  public Message(UUID id, String user, String text, float sentimentScore, long timestamp, UUID restaurantId, String imageUrl) {
+    this(id, user, text, timestamp, new ArrayList<String>(), sentimentScore, restaurantId, imageUrl);
+  }
+
   public Message(UUID id, String user, String text, long timestamp, ArrayList<String> labels, float sentimentScore, UUID restaurantId, String imageUrl) {
     this.id = id;
     this.user = user;
