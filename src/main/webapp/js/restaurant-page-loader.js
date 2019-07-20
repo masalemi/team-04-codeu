@@ -118,7 +118,7 @@ function fetchRestaurantInfo(){
     } else {
     average = average * 5;
     average = average + 5;
-    document.getElementById("reviewScore").textContent = "Average Score: " + average + "/10";
+    document.getElementById("reviewScore").textContent = "Average Score: " + Math.round(average * 100) / 100 + "/10";
     }
   }
 

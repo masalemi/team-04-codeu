@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.codeu.data.Datastore;
 import com.google.gson.JsonObject;
+import java.util.ArrayList;
+import com.google.gson.Gson;
+
 
 /**
  * Handles fetching site statistics.
@@ -36,6 +39,7 @@ public class StatsPageServlet extends HttpServlet{
     String longestMessage = datastore.getLongestMessage();
     int userCount = datastore.getTotalUserCount();
     String mostActiveUser = datastore.getMostActiveUser();
+    ArrayList<ArrayList<String>> bestRestaurants = datastore.getBestRestaurants(10);
 
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("messageCount", messageCount);
@@ -43,6 +47,8 @@ public class StatsPageServlet extends HttpServlet{
     jsonObject.addProperty("longestMessage", longestMessage);
     jsonObject.addProperty("userCount", userCount);
     jsonObject.addProperty("mostActiveUser", mostActiveUser);
+    String restString = new Gson().toJson(bestRestaurants);
+    jsonObject.addProperty("bestRestaurants", restString);
     response.getOutputStream().println(jsonObject.toString());
   }
 }
