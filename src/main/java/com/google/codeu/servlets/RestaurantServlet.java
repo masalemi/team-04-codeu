@@ -104,22 +104,20 @@ public class RestaurantServlet extends HttpServlet {
     if (restaurantId == null || restaurantId.equals("null") || restaurantId.equals("")){
       restaurantId = UUID.randomUUID().toString();
     }
-    //String restaurantId = UUID.randomUUID().toString();
     String name = request.getParameter("name");
     String description = request.getParameter("description");
-    // String image_string = request.getParameter("images");
-    // String[] items = image_string.split(",");
-    // List<String> images = Arrays.asList(items);
-    ArrayList<String> upload_urls = new ArrayList<String>();
 
-    // for (String image : images) {
-    //   String uploadedFileUrl = getUploadedFileUrl(request, "image");
-    //   upload_urls.add(uploadedFileUrl);
-    // }
+    ArrayList<String> upload_urls = new ArrayList<String>();
 
     String uploadedFileUrl = getUploadedFileUrl(request, "image");
     if (uploadedFileUrl != null){
       upload_urls.add(uploadedFileUrl.replace("<i>", "_").replace("</i>", "_"));
+    }
+    
+    if(request.getParameter("lat") != null && request.getParameter("lng") != null) {
+      double lat = Double.parseDouble(request.getParameter("lat"));
+      double lng = Double.parseDouble(request.getParameter("lng"));
+      storeRestaurantMarker(restaurantId, lat, lng, name);
     }
 
     Restaurant restaurant = new Restaurant(UUID.fromString(restaurantId), name, description, upload_urls);
@@ -136,10 +134,21 @@ public class RestaurantServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(markerEntity);
-    
+
     response.sendRedirect("/restaurant-page.html?restaurantId=" + restaurantId);
   }
 
+  private void storeRestaurantMarker(String restaurantId, double lat, double lng, String content) {
+    Entity markerEntity = new Entity("Marker");
+    markerEntity.setProperty("restaurantId", restaurantId);
+    markerEntity.setProperty("lat", lat);
+    markerEntity.setProperty("lng", lng);
+    markerEntity.setProperty("content", content);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(markerEntity);
+  }
+  
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName){
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);

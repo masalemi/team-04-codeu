@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-// Get ?restaurant=XYZ parameter value
+// Get URL parameter values
 const urlParams = new URLSearchParams(window.location.search);
 
 const parameterRestaurant = urlParams.get('restaurantId');
 const parameterLat = urlParams.get('lat');
 const parameterLng = urlParams.get('lng');
-
-// URL must include ?restaurantId=XYZ parameter. If not, redirect to homepage.
-if (!parameterRestaurant) {
-  //window.location.replace('/');
-}
 
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
@@ -52,7 +47,7 @@ function addRestaurantUI() {
   if (parameterLat){
     document.getElementById("latId").setAttribute("value", parameterLat)
   }
-  
+
   if (parameterLng){
     document.getElementById("lngId").setAttribute("value", parameterLng)
   }
