@@ -113,6 +113,12 @@ public class RestaurantServlet extends HttpServlet {
     if (uploadedFileUrl != null){
       upload_urls.add(uploadedFileUrl.replace("<i>", "_").replace("</i>", "_"));
     }
+    
+    if(request.getParameter("lat") != null && request.getParameter("lng") != null) {
+      double lat = Double.parseDouble(request.getParameter("lat"));
+      double lng = Double.parseDouble(request.getParameter("lng"));
+      storeRestaurantMarker(restaurantId, lat, lng, name);
+    }
 
     Restaurant restaurant = new Restaurant(UUID.fromString(restaurantId), name, description, upload_urls);
     datastore.storeRestaurant(restaurant);
@@ -132,6 +138,17 @@ public class RestaurantServlet extends HttpServlet {
     response.sendRedirect("/restaurant-page.html?restaurantId=" + restaurantId);
   }
 
+  private void storeRestaurantMarker(String restaurantId, double lat, double lng, String content) {
+    Entity markerEntity = new Entity("Marker");
+    markerEntity.setProperty("restaurantId", restaurantId);
+    markerEntity.setProperty("lat", lat);
+    markerEntity.setProperty("lng", lng);
+    markerEntity.setProperty("content", content);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(markerEntity);
+  }
+  
   private String getUploadedFileUrl(HttpServletRequest request, String formInputElementName){
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
