@@ -14,7 +14,7 @@ function fetchStats(){
     const mostActiveUser = buildStatElement('Most Active User: ' + stats.mostActiveUser);
     statsContainer.appendChild(messageCountElement);
     statsContainer.appendChild(averageMessageLengthElement);
-    statsContainer.appendChild(longestMessage);
+    // statsContainer.appendChild(longestMessage);
     statsContainer.appendChild(userCountElement);
     statsContainer.appendChild(mostActiveUser);
   });
