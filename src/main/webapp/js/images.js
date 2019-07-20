@@ -26,7 +26,8 @@ function fetchRestaurantImages(){
           list_html += '<li class=\'slides-in\'><img src=\'' + url + '\' alt=\'project image\'></li>'
         }
         else {
-          list_html += '<li><img src=\'' + url + '\' alt=\'project image\'></li>'
+          // list_html += '<li><img src=\'' + url + '\' alt=\'project image\'></li>'
+          list_html += '<li class=\'slides-in\'><img src=\'' + url + '\' alt=\'project image\'></li>'
         }
       }
       const end = '</ul><div class=\'cd-slider-navigation\'><ul><li><a href=\'#\' class=\'prev inactive\'><i class=\'fas fa-chevron-left fa-3x\' style=\'color:white\'></i></a></li><li><a href=\'#\' class=\'next\'><i class=\'fas fa-chevron-right fa-3x\' style=\'color:white\'></i></a></li></ul></div>';
