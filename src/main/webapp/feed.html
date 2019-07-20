@@ -8,13 +8,35 @@
 
 <script>
 
+  function createTitle() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const titleContainer = document.getElementById('feed-title');
+    const parameterType = urlParams.get('feedType');
+    console.log()
+    if (parameterType) {
+      if (parameterType == 'posts') {
+        titleContainer.innerHTML = '<h1>Recent Posts</h1>'
+      }
+      else if (parameterType == 'reviews') {
+        titleContainer.innerHTML = '<h1>Recent Reviews</h1>'
+      }
+    }
+  }
+
   // Fetch messages and add them to the page.
   function fetchMessages(){
     const urlParams = new URLSearchParams(window.location.search);
     const parameterRestaurant = urlParams.get('restaurantId');
+    const parameterType = urlParams.get('feedType');
+
+    let type = '';
+
+    if (parameterType) {
+      type += '?feedType=' + parameterType;
+    }
     
     if (!parameterRestaurant) {
-      const url = '/feed';
+      const url = '/feed' + type;
     fetch(url).then((response) => {
       return response.json();
     }).then((messages) => {
@@ -80,13 +102,14 @@
 
   // Fetch data and populate the UI of the page.
   function buildUI(){
+   createTitle();
    fetchMessages();
   }
 </script>
 </head>
 <body onload="buildUI()">
  <div id="content">
-  <h1>Message Feed</h1>
+  <div id = feed-title>Message Feed</div>
   <hr/>
   <div id="message-container">Loading...</div>
  </div>

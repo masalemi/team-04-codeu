@@ -329,13 +329,35 @@ public class Datastore {
     return getMessagesFromQuery(query);
   }
 
+  public List<Message> getAllPosts() {
+  	List<Message> all_messages = getAllMessages();
+  	List<Message> posts = new ArrayList<Message>();
+  	for (Message message : all_messages) {
+  		if (message.getRestaurant() == null) {
+  			posts.add(message);
+  		}
+  	}
+  	return posts;
+  }
+
+  public List<Message> getAllReviews() {
+  	List<Message> all_messages = getAllMessages();
+  	List<Message> reviews = new ArrayList<Message>();
+  	for (Message message : all_messages) {
+  		if (message.getRestaurant() != null) {
+  			reviews.add(message);
+  		}
+  	}
+  	return reviews;
+  }
+
   public ArrayList<ArrayList<String>> getBestRestaurants(int num) {
   	Query query = new Query("Message");
   	List<Message> messages = getMessagesFromQuery(query);
   	HashMap<String, Float> restaurantRatings = new HashMap<String, Float>();
   	for (int i = 0; i < messages.size(); i++) {
   		Message message = messages.get(i);
-  		String id = message.getId().toString();
+  		String id = message.getRestaurant().toString();
   		if (id == null) {
   			continue;
   		}
@@ -366,7 +388,7 @@ public class Datastore {
     	topRestaurants.add(new ArrayList<String>(id_and_score));
     }
 
-    System.out.println(topRestaurants);
+    // System.out.println(topRestaurants);
 
   	return topRestaurants;
   }
